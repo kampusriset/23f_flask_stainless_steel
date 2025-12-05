@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Dashboard BIMANTARA STAINLESS STEEL - Penjualan Dandang Kukus Berkualitas">
+    <title>Dashboard - BIMANTARA STAINLESS STEEL</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/styles.css') }}?v=1.0">
+</head>
+<body class="dashboard-page">
+    <div class="dashboard-container">
+        <!-- Header Section -->
+        <header class="dashboard-header">
+            <div class="header-content">
+                <div class="brand-logo">
+                    <img src="{{ url_for('static', filename='images/logo1.png') }}" alt="Logo BIMANTARA STAINLESS STEEL">
+                </div>
+                <div class="user-info">
+                    <span class="welcome-text">Selamat datang, <strong>{{ username }}</strong>!</span>
+                    <a href="{{ url_for('logout') }}" class="logout-btn" aria-label="Logout">
+                        Logout
+                    </a>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="dashboard-main">
+            <!-- Flash Messages -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <div class="messages">
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }}" role="alert">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+
+            <!-- Welcome Card -->
+            <section class="welcome-card">
+                <h2>Dashboard Penjualan Dandang Kukus</h2>
+                <p>Kelola produk dan penjualan dandang kukus stainless steel berkualitas tinggi</p>
+
+                <!-- Dashboard Statistics -->
+                <div class="dashboard-stats">
+                    <article class="stat-card">
+                        <h3>📦 Manajemen Produk</h3>
+                        <p>Kelola katalog dandang kukus, tambah produk baru, dan update stok barang</p>
+                        <a href="#" class="card-link">Kelola Produk</a>
+                    </article>
+
+                    <article class="stat-card">
+                        <h3>🛒 Pesanan Masuk</h3>
+                        <p>Lihat dan proses pesanan dandang kukus dari pelanggan</p>
+                        <a href="#" class="card-link">Lihat Pesanan</a>
+                    </article>
+
+                    <article class="stat-card">
+                        <h3>👥 Data Pelanggan</h3>
+                        <p>Kelola informasi pelanggan dan riwayat pembelian</p>
+                        <a href="#" class="card-link">Kelola Pelanggan</a>
+                    </article>
+
+                    <article class="stat-card">
+                        <h3>📊 Laporan Penjualan</h3>
+                        <p>Analisis penjualan dandang kukus dan grafik performa bisnis</p>
+                        <a href="#" class="card-link">Lihat Laporan</a>
+                    </article>
+
+                    <article class="stat-card">
+                        <h3>💰 Keuangan</h3>
+                        <p>Monitor pendapatan, pengeluaran, dan laporan keuangan</p>
+                        <a href="#" class="card-link">Kelola Keuangan</a>
+                    </article>
+
+                    <article class="stat-card">
+                        <h3>⚙️ Pengaturan Toko</h3>
+                        <p>Konfigurasi sistem, metode pembayaran, dan pengiriman</p>
+                        <a href="#" class="card-link">Pengaturan</a>
+                    </article>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="dashboard-footer">
+            <p>&copy; 2025 <strong>BIMANTARA STAINLESS STEEL</strong> - Produsen Dandang Kukus Berkualitas | All Rights Reserved</p>
+        </footer>
+    </div>
+</body>
+</html>

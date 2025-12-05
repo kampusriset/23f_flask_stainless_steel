@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Login Dashboard BIMANTARA STAINLESS STEEL">
+    <title>Login - BIMANTARA STAINLESS STEEL</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/styles.css') }}">
+</head>
+<body class="auth-page">
+    <div class="login-container">
+        <div class="login-card">
+            <!-- Login Header -->
+            <div class="login-header">
+                <div class="login-logo">
+                    <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo BIMANTARA STAINLESS STEEL">
+                </div>
+                <p>Stainless Steel - Dandang Kukus Berkualitas</p>
+            </div>
+
+            <!-- Flash Messages -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <div class="messages">
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }}" role="alert">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+
+            <!-- Login Form -->
+            <form method="POST" action="{{ url_for('login') }}" class="login-form">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input 
+                        type="text" 
+                        id="username" 
+                        name="username" 
+                        placeholder="Masukkan username" 
+                        required 
+                        autofocus
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input 
+                        type="password" 
+                        id="password" 
+                        name="password" 
+                        placeholder="Masukkan password" 
+                        required
+                    >
+                </div>
+
+                <button type="submit" class="login-btn">
+                    Masuk ke Dashboard
+                </button>
+            </form>
+
+            <!-- Login Footer -->
+            <div class="login-footer">
+                <p>&copy; 2024 BIMANTARA STAINLESS STEEL. All Rights Reserved.</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

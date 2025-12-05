@@ -1,0 +1,652 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --primary-tosca: #006666;
+    --secondary-tosca: #004D4D;
+    --dark-tosca: #003333;
+    --light-tosca: #5F9EA0;
+    --accent-green: #2F7C6E;
+    --dark-gray: #2C3E50;
+    --medium-gray: #34495E;
+    --light-gray: #ECF0F1;
+    --white: #FFFFFF;
+    --text-dark: #2d3748;
+    --text-medium: #4a5568;
+    --text-light: #718096;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    min-height: 100vh;
+    padding: 0;
+    margin: 0;
+}
+
+/* Body untuk halaman login/logout */
+body.auth-page {
+    background: linear-gradient(135deg, var(--primary-tosca) 0%, var(--dark-tosca) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+/* Body untuk dashboard */
+body.dashboard-page {
+    background: var(--light-gray);
+}
+
+/* ========================================
+   ANIMATIONS
+======================================== */
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.5);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes shine {
+    0% {
+        background-position: -200% center;
+    }
+    100% {
+        background-position: 200% center;
+    }
+}
+
+/* ========================================
+   LOGIN PAGE STYLES
+======================================== */
+.login-container {
+    width: 100%;
+    max-width: 450px;
+    margin: 0 auto;
+}
+
+.login-card {
+    background: var(--white);
+    border-radius: 16px;
+    box-shadow: 0 20px 60px rgba(0, 139, 139, 0.3);
+    padding: 40px;
+    animation: slideIn 0.5s ease-out;
+    border-top: 5px solid var(--primary-tosca);
+}
+
+.login-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.login-header h1 {
+    color: var(--primary-tosca);
+    font-size: 28px;
+    font-weight: 800;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+}
+
+.login-header p {
+    color: var(--text-light);
+    font-size: 14px;
+}
+
+.login-form {
+    margin-top: 30px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    color: var(--text-dark);
+    font-weight: 600;
+    font-size: 14px;
+    margin-bottom: 8px;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid var(--light-gray);
+    border-radius: 8px;
+    font-size: 15px;
+    transition: all 0.3s ease;
+    font-family: inherit;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: var(--primary-tosca);
+    box-shadow: 0 0 0 3px rgba(0, 139, 139, 0.1);
+}
+
+.login-btn {
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(135deg, var(--primary-tosca) 0%, var(--secondary-tosca) 100%);
+    color: var(--white);
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 10px;
+}
+
+.login-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(0, 139, 139, 0.4);
+}
+
+.login-footer {
+    text-align: center;
+    margin-top: 24px;
+    padding-top: 24px;
+    border-top: 1px solid var(--light-gray);
+}
+
+.login-footer p {
+    color: var(--text-light);
+    font-size: 12px;
+}
+
+/* ========================================
+   LOGOUT PAGE STYLES
+======================================== */
+.logout-container {
+    width: 100%;
+    max-width: 500px;
+}
+
+.logout-card {
+    background: var(--white);
+    border-radius: 16px;
+    box-shadow: 0 20px 60px rgba(0, 139, 139, 0.3);
+    padding: 40px;
+    text-align: center;
+    animation: slideIn 0.5s ease-out;
+    border-top: 4px solid var(--primary-tosca);
+}
+
+.logout-icon {
+    color: var(--primary-tosca);
+    margin-bottom: 24px;
+    animation: fadeIn 0.8s ease-in;
+}
+
+.logout-icon svg {
+    display: inline-block;
+}
+
+.logout-content h1 {
+    color: var(--dark-tosca);
+    font-size: 28px;
+    margin-bottom: 12px;
+}
+
+.logout-content p {
+    color: var(--text-medium);
+    font-size: 16px;
+    margin-bottom: 8px;
+    line-height: 1.6;
+}
+
+.logout-message {
+    color: var(--text-light);
+    font-style: italic;
+    margin-bottom: 24px;
+}
+
+.logout-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 24px;
+}
+
+.logout-footer {
+    margin-top: 24px;
+    padding-top: 24px;
+    border-top: 1px solid var(--light-gray);
+}
+
+/* ========================================
+   DASHBOARD STYLES
+======================================== */
+.dashboard-container {
+    width: 100%;
+    min-height: 100vh;
+    background: var(--light-gray);
+}
+
+.dashboard-header {
+    background: linear-gradient(135deg, var(--primary-tosca) 0%, var(--secondary-tosca) 100%);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 24px 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.dashboard-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    animation: shine 3s infinite;
+}
+
+.header-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header-content h1 {
+    color: var(--white);
+    font-size: 28px;
+    font-weight: 700;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.header-content h1::before {
+    content: '⚙';
+    font-size: 32px;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.welcome-text {
+    color: var(--white);
+    font-size: 15px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.welcome-text strong {
+    color: var(--white);
+    font-weight: 700;
+}
+
+.logout-btn {
+    background: var(--white);
+    color: var(--dark-tosca);
+    padding: 10px 24px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    border: 2px solid var(--white);
+}
+
+.logout-btn:hover {
+    background: transparent;
+    color: var(--white);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255, 255, 255, 0.3);
+}
+
+.dashboard-main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+.welcome-card {
+    background: var(--white);
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 40px;
+    margin-bottom: 30px;
+    border-left: 6px solid var(--primary-tosca);
+}
+
+.welcome-card h2 {
+    color: var(--dark-tosca);
+    font-size: 28px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.welcome-card h2::before {
+    content: '🏭';
+    font-size: 32px;
+}
+
+.welcome-card > p {
+    color: var(--text-light);
+    font-size: 16px;
+    margin-bottom: 30px;
+}
+
+.dashboard-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+    margin-top: 30px;
+}
+
+.stat-card {
+    background: linear-gradient(135deg, var(--primary-tosca) 0%, var(--secondary-tosca) 100%);
+    color: var(--white);
+    padding: 30px;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.stat-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+    transition: all 0.5s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 12px 24px rgba(0, 139, 139, 0.4);
+}
+
+.stat-card:hover::before {
+    top: -30%;
+    right: -30%;
+}
+
+.stat-card h3 {
+    font-size: 22px;
+    margin-bottom: 10px;
+    font-weight: 700;
+    position: relative;
+    z-index: 1;
+}
+
+.stat-card p {
+    font-size: 15px;
+    opacity: 0.95;
+    margin-bottom: 16px;
+    line-height: 1.6;
+    position: relative;
+    z-index: 1;
+}
+
+.card-link {
+    color: var(--white);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 12px;
+    transition: all 0.3s ease;
+    position: relative;
+    z-index: 1;
+    padding: 8px 16px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 6px;
+}
+
+.card-link:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateX(5px);
+}
+
+.card-link::after {
+    content: '→';
+    font-size: 16px;
+    transition: transform 0.3s ease;
+}
+
+.card-link:hover::after {
+    transform: translateX(5px);
+}
+
+.dashboard-footer {
+    background: var(--white);
+    padding: 24px;
+    text-align: center;
+    margin-top: 40px;
+    box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+    border-top: 3px solid var(--primary-tosca);
+}
+
+.dashboard-footer p {
+    color: var(--text-light);
+    font-size: 14px;
+}
+
+.dashboard-footer p strong {
+    color: var(--dark-tosca);
+    font-weight: 700;
+}
+
+/* ========================================
+   BRAND LOGO STYLES
+======================================== */
+.brand-logo {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.brand-logo img {
+    height: 60px;
+    width: auto;
+    object-fit: contain;
+}
+
+.brand-name {
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--white);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.brand-tagline {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.9);
+    font-weight: 400;
+    display: block;
+    margin-top: 2px;
+}
+
+/* Logo untuk halaman login/logout */
+.login-logo,
+.logout-logo {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.login-logo img,
+.logout-logo img {
+    height: 95px;
+    width: auto;
+    object-fit: contain;
+    margin-bottom: 15px;
+}
+
+/* ========================================
+   ALERT/MESSAGE STYLES
+======================================== */
+.messages {
+    margin-bottom: 20px;
+}
+
+.alert {
+    padding: 14px 18px;
+    border-radius: 8px;
+    margin-bottom: 12px;
+    font-size: 14px;
+    font-weight: 500;
+    border-left: 4px solid;
+}
+
+.alert-success {
+    background-color: #d4edda;
+    color: #155724;
+    border-left-color: var(--accent-green);
+}
+
+.alert-info {
+    background-color: #d1ecf1;
+    color: #0c5460;
+    border-left-color: var(--primary-tosca);
+}
+
+.alert-error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border-left-color: #dc3545;
+}
+
+/* ========================================
+   BUTTON STYLES
+======================================== */
+.btn {
+    display: inline-block;
+    padding: 12px 28px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    border: none;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--primary-tosca) 0%, var(--secondary-tosca) 100%);
+    color: var(--white);
+    box-shadow: 0 4px 6px rgba(0, 139, 139, 0.3);
+}
+
+.btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 16px rgba(0, 139, 139, 0.4);
+}
+
+.btn-secondary {
+    background: var(--light-gray);
+    color: var(--dark-tosca);
+    border: 2px solid var(--primary-tosca);
+}
+
+.btn-secondary:hover {
+    background: var(--primary-tosca);
+    color: var(--white);
+    transform: translateY(-2px);
+}
+
+/* ========================================
+   UTILITY STYLES
+======================================== */
+.small-text {
+    font-size: 12px;
+    color: var(--text-light);
+}
+
+/* ========================================
+   RESPONSIVE STYLES
+======================================== */
+@media (max-width: 768px) {
+    .header-content {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+    }
+
+    .header-content h1 {
+        font-size: 22px;
+    }
+
+    .user-info {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .dashboard-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .welcome-card {
+        padding: 24px;
+    }
+}
+
+@media (max-width: 480px) {
+    .logout-card {
+        padding: 30px 20px;
+    }
+
+    .logout-content h1 {
+        font-size: 24px;
+    }
+
+    .btn {
+        font-size: 14px;
+        padding: 10px 20px;
+    }
+
+    .welcome-card {
+        padding: 20px;
+    }
+
+    .welcome-card h2 {
+        font-size: 22px;
+    }
+
+    .stat-card {
+        padding: 24px;
+    }
+
+    .header-content h1 {
+        font-size: 18px;
+    }
+
+    .brand-name {
+        font-size: 18px;
+    }
+}
