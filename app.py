@@ -36,9 +36,7 @@ def hash_password(password):
 def check_password(hashed_password, user_password):
     return bcrypt.checkpw(user_password.encode('utf-8'), hashed_password.encode('utf-8'))
 
-# Fungsi untuk membuat database dan tabel
 def init_db():
-    # Buat database jika belum ada
     conn = pymysql.connect(
         host=os.getenv('DB_HOST', 'localhost'),
         user=os.getenv('DB_USER', 'root'),
@@ -53,7 +51,6 @@ def init_db():
     conn = get_db_connection()
     cursor = conn.cursor()
 
-    # Tabel products (sudah ada - JANGAN DIUBAH)
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS products (
         id INT PRIMARY KEY AUTO_INCREMENT,
@@ -94,7 +91,6 @@ def init_db():
     )
     """)
 
-    # (Safety) Tambah kolom jika belum ada (tidak gagal jika sudah ada)
     try:
         cursor.execute("ALTER TABLE orders ADD COLUMN user_id INT")
     except:
@@ -556,7 +552,7 @@ def invoice():
         return redirect(url_for('profile') + '#section-orders')
     
     # Hapus cart dari session setelah ditampilkan
-    session.pop('cart', None)  # <-- Tambah baris ini untuk kosongkan keranjang
+    session.pop('cart', None)  # kosongkan keranjang
     session.modified = True  # Pastikan session diupdate
     
     flash("Pesanan berhasil dibuat!", "success")
