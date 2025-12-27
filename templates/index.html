@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="BIMANTARA STAINLESS STEEL - Produsen Dandang Kukus Stainless Steel Berkualitas Tinggi">
+    <title>BIMANTARA STAINLESS STEEL - Produsen Dandang Kukus Premium</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link
+      rel="stylesheet"
+      href="{{url_for('static', filename='styles/landing.css')}}"
+    />
+  </head>
+  <body>
+    <!-- Navigation Bar -->
+    <nav class="nav-bar">
+      <img
+        id="logo"
+        src="{{url_for('static', filename='images/logo.png')}}"
+        alt="BIMANTARA STAINLESS STEEL Logo"
+      />
+      <div class="nav-link">
+        <div class="navigation">
+          <a href="#hero">Home</a>
+          <a href="#keunggulan">Keunggulan</a>
+          <a href="#tentang">Tentang</a>
+          <a href="#kontak">Kontak</a>
+          <a href="{{ url_for('product') }}">Produk</a>          
+        </div>
+      </div>
+      <div class="nav-actions">
+      {% if session.get('user_id') %}
+          {% if session.get('role') == 'admin' %}
+              <a href="{{ url_for('dashboard') }}">Dashboard</a>
+          {% else %}
+              <a href="{{ url_for('profile') }}">Profil</a>
+          {% endif %}
+      {% else %}
+          <a href="{{ url_for('login') }}">Login</a>
+          <a href="{{ url_for('register') }}">Daftar</a>
+      {% endif %}
+      </div>
+    </nav>
+
+    <main>
+      <!-- Hero Section -->
+      <section class="hero" id="hero">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+          <div class="hero-text">
+            <h1 class="hero-title">BIMANTARA STAINLESS STEEL</h1>
+            <p class="hero-subtitle">Produsen Dandang Kukus Berkualitas Premium</p>
+            <p class="hero-description">
+              Temukan beragam pilihan dandang kukus penanak nasi yang dirancang untuk memenuhi kebutuhan memasak Anda. Kualitas terjamin, tahan lama, dan cocok untuk berbagai kebutuhan kuliner Anda.
+            </p>
+            <div class="hero-buttons">
+              <a href="{{ url_for('product') }}" class="cta-button btn-hero-primary">Lihat Produk</a>
+              <a href="{{ url_for('register') }}" class="btn-hero-secondary">Mulai Belanja</a>
+            </div>
+          </div>
+          <figure class="hero-image">
+            <img
+              src="{{url_for('static', filename='images/dandangnobg.png')}}"
+              alt="Dandang Stainless Steel Premium"
+            />
+          </figure>
+        </div>
+      </section>
+
+<!-- Motto Section -->
+<section class="motto-section">
+  <div class="motto-decoration">
+    <div class="decoration-line"></div>
+    <div class="decoration-symbol">✦</div>
+    <div class="decoration-line"></div>
+  </div>
+  <div class="motto-container">
+    <p class="motto-text">
+      Produk kami mengutamakan ketahanan dan kualitas, untuk memberikan pengalaman memasak yang praktis dan berkualitas
+    </p>
+  </div>
+  <div class="motto-signature">
+    <div class="signature-line"></div>
+    <p class="signature-text">Komitmen Kami</p>
+    <div class="signature-line"></div>
+  </div>
+</section>
+
+      <!-- Features Section (Keunggulan) -->
+      <section class="keunggulan-section" id="keunggulan">
+        <div class="container">
+          <h2 class="section-title">Mengapa Memilih Kami?</h2>
+          <p class="section-subtitle">Keunggulan produk BIMANTARA STAINLESS STEEL</p>
+          <div class="features-grid">
+            <article class="feature-card">
+              <div class="feature-icon">🏆</div>
+              <h3>Kualitas Premium</h3>
+              <p>Terbuat dari stainless steel food grade yang aman dan tahan lama untuk kebutuhan memasak Anda</p>
+            </article>
+            <article class="feature-card">
+              <div class="feature-icon">⚡</div>
+              <h3>Proses Cepat</h3>
+              <p>Pemanasan merata dan mengukus lebih cepat dengan hasil sempurna setiap kali</p>
+            </article>
+            <article class="feature-card">
+              <div class="feature-icon">💎</div>
+              <h3>Desain Elegan</h3>
+              <p>Tampilan modern dan profesional yang akan mempercantik dapur Anda</p>
+            </article>
+            <article class="feature-card">
+              <div class="feature-icon">🛡️</div>
+              <h3>Garansi Resmi</h3>
+              <p>Garansi produk dan layanan purna jual terpercaya untuk kepuasan Anda</p>
+            </article>
+            <article class="feature-card">
+              <div class="feature-icon">🌟</div>
+              <h3>Anti Karat</h3>
+              <p>Material stainless steel berkualitas yang tidak mudah berkarat dan tahan lama</p>
+            </article>
+            <article class="feature-card">
+              <div class="feature-icon">🚚</div>
+              <h3>Pengiriman Aman</h3>
+              <p>Dikemas dengan aman dan pengiriman cepat ke seluruh Indonesia</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- Tentang Kami Section -->
+<section class="tentang-section" id="tentang">
+    <div class="container">
+        <div class="tentang-content">
+            <div class="tentang-text">
+                <h2>BIMANTARA STAINLESS STEEL</h2>
+                <p>BIMANTARA STAINLESS STEEL merupakan suatu usaha yang menekuni bidang pembuatan dandang kukus atau bisa disebut dandang nanak nasi. Dandang kukus sendiri adalah salah satu alat masak yang banyak dipakai untuk kebutuhan rumah tangga seperti menanak nasi, mengukus rebusan dan lain sebagainya.</p>
+                <p>Kami berkomitmen untuk menghadirkan produk berkualitas tinggi dengan harga terjangkau, sehingga setiap pelanggan dapat menikmati kemudahan dalam memasak dengan peralatan yang awet dan aman.</p>
+                <p>Dengan menggunakan material <strong>stainless steel food grade</strong>, produk kami aman untuk kesehatan dan ramah lingkungan.</p>
+            </div>
+            <div class="tentang-image">
+                <img src="{{ url_for('static', filename='images/mmt.png') }}" alt="BIMANTARA STAINLESS STEEL">
+            </div>
+        </div>
+    </div>
+</section>
+
+      <!-- Kontak Section -->
+      <section class="kontak-section" id="kontak">
+        <div class="container">
+          <h2 class="section-title">Hubungi Kami</h2>
+          <p class="section-subtitle">Kami siap membantu kebutuhan Anda</p>
+          <div class="kontak-grid">
+            <div class="kontak-info">
+              <div class="kontak-item">
+                <div class="kontak-icon">📍</div>
+                <div>
+                  <h3>Alamat</h3>
+                  <p>Jl. Industri No. 123, Jakarta Timur, Indonesia</p>
+                </div>
+              </div>
+              <div class="kontak-item">
+                <div class="kontak-icon">📞</div>
+                <div>
+                  <h3>Telepon</h3>
+                  <p>+62 878-3162-0154</p>
+                </div>
+              </div>
+              <div class="kontak-item">
+                <div class="kontak-icon">✉️</div>
+                <div>
+                  <h3>Email</h3>
+                  <p>info@bimantarasteel.com</p>
+                </div>
+              </div>
+              <div class="kontak-item">
+                <div class="kontak-icon">⏰</div>
+                <div>
+                  <h3>Jam Operasional</h3>
+                  <p>Senin - Sabtu: 08:00 - 17:00 WIB</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="kontak-lokasi">
+            <h3 style="margin-bottom: 1rem; color: var(--text-color);">Lokasi Kami</h3>
+            <p class="section-subtitle" style="margin-bottom: 1.5rem;">Kunjungi workshop kami di Jawa Tengah</p>
+
+            <!-- Container Peta Responsif -->
+            <div class="map-responsive-container">
+                <iframe 
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3954.3457113432364!2d110.63300277593048!3d-7.6459231756389645!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e7a4149307e39c7%3A0xe218a29b75bb32a9!2sBIMANTARA%20STEEL!5e0!3m2!1sid!2sid!4v1765363510885!5m2!1sid!2sid" 
+                    width="600" 
+                    height="450" 
+                    style="border:0;" 
+                    allowfullscreen="" 
+                    loading="lazy" 
+                    referrerpolicy="no-referrer-when-downgrade"
+                    title="Peta Lokasi BIMANTARA STAINLESS STEEL">
+                </iframe>
+            </div>
+            <p style="margin-top: 1.5rem; font-size: 0.9rem; color: #666;">
+                <strong>Alamat Lengkap:</strong> BIMANTARA STEEL, Jawa Tengah.
+            </p>
+          </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-brand">
+            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo BIMANTARA">
+            <h2>BIMANTARA STAINLESS STEEL</h2>
+            <p>Produsen dandang kukus stainless steel berkualitas tinggi untuk kebutuhan rumah tangga dan industri.</p>
+            <div class="social-links">
+              <a href="#" class="social-link" aria-label="Instagram">
+                <i class="fab fa-instagram"></i>
+              </a>
+              <a href="#" class="social-link" aria-label="Facebook">
+                <i class="fab fa-facebook"></i>
+              </a>
+              <a href="#" class="social-link" aria-label="Email">
+                <i class="fas fa-envelope"></i>
+              </a>
+            </div>
+          </div>
+          <div class="footer-links">
+            <h4>Menu Utama</h4>
+            <ul>
+              <li><a href="#hero">Beranda</a></li>
+              <li><a href="#produk">Produk</a></li>
+              <li><a href="#keunggulan">Keunggulan</a></li>
+              <li><a href="#tentang">Tentang Kami</a></li>
+              <li><a href="#kontak">Kontak</a></li>
+            </ul>
+          </div>
+          <div class="footer-links">
+            <h4>Layanan</h4>
+            <ul>
+              <li><a href="{{url_for('product')}}">Katalog Produk</a></li>
+              <li><a href="{{ url_for('profile') }}#section-orders">Cek Pesanan</a></li>
+              <li><a href="#kontak">Hubungi Kami</a></li>
+            </ul>
+          </div>
+          <div class="footer-links">
+            <h4>Akun</h4>
+            <ul>
+              <li><a href="{{ url_for('login') }}">Login</a></li>
+              <li><a href="{{ url_for('register') }}">Daftar</a></li>
+              <li><a href="{{url_for('profile')}}">Profil</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <p>&copy; 2025 BIMANTARA STAINLESS STEEL. All Rights Reserved.</p>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      // Smooth scrolling for anchor links
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+          e.preventDefault();
+          const target = document.querySelector(this.getAttribute('href'));
+          if (target) {
+            target.scrollIntoView({
+              behavior: 'smooth',
+              block: 'start'
+            });
+          }
+        });
+      });
+
+      // Navbar scroll effect
+      let lastScroll = 0;
+      const navbar = document.querySelector('.nav-bar');
+      
+      window.addEventListener('scroll', () => {
+        const currentScroll = window.pageYOffset;
+        
+        if (currentScroll > 100) {
+          navbar.classList.add('scrolled');
+        } else {
+          navbar.classList.remove('scrolled');
+        }
+        
+        lastScroll = currentScroll;
+      });
+    </script>
+  </body>
+</html>

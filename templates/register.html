@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daftar - BIMANTARA STAINLESS STEEL</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/register.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <img id="logo" src="{{ url_for('static', filename='images/logo.png') }}" alt="BIMANTARA STAINLESS STEEL Logo">
+            </div>
+            <div class="nav-actions">
+                <a href="{{ url_for('index') }}" class="btn-secondary">Kembali ke Beranda</a>
+                <a href="{{ url_for('login') }}" class="btn-primary">Login</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="register-wrapper">
+        <div class="register-container">
+            <div class="register-header">
+                <div class="register-icon">📝</div>
+                <h2 class="register-title">Buat Akun Baru</h2>
+                <p class="register-subtitle">Bergabunglah dengan BIMANTARA STAINLESS STEEL</p>
+            </div>
+            
+            <div class="flash-messages">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }}">{{ message }}</div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+            </div>
+            
+            <form method="POST" action="{{ url_for('register') }}" id="registerForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="name">Nama Lengkap</label>
+                        <div class="input-wrapper">
+                            <input type="text" id="name" name="name" placeholder="John Doe" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="phone">Nomor Telepon</label>
+                        <div class="input-wrapper">
+                            <input type="tel" id="phone" name="phone" placeholder="08123456789" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <div class="input-wrapper">
+                        <input type="email" id="email" name="email" placeholder="nama@email.com" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="address">Alamat Lengkap</label>
+                    <textarea id="address" name="address" placeholder="Masukkan alamat lengkap untuk pengiriman" required></textarea>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <div class="input-wrapper">
+                            <input type="password" id="password" name="password" placeholder="Minimal 8 karakter" required minlength="8">
+                        </div>
+                        <div class="password-strength">
+                            <div class="strength-bar" id="strengthBar"></div>
+                        </div>
+                        <p class="password-hint" id="passwordHint">Gunakan kombinasi huruf, angka, dan simbol</p>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="confirm_password">Konfirmasi Password</label>
+                        <div class="input-wrapper">
+                            <input type="password" id="confirm_password" name="confirm_password" placeholder="Ketik ulang password" required>
+                        </div>
+                        <p class="password-match" id="passwordMatch"></p>
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn-register">Daftar Sekarang</button>
+            </form>
+            
+            <div class="login-link">
+                <p>Sudah punya akun? <a href="{{ url_for('login') }}">Login di sini</a></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Password strength checker (hanya visual)
+        const passwordInput = document.getElementById('password');
+        const strengthBar = document.getElementById('strengthBar');
+        const passwordHint = document.getElementById('passwordHint');
+
+        passwordInput.addEventListener('input', function() {
+            const password = this.value;
+            let strength = 0;
+
+            // Remove all strength classes
+            strengthBar.className = 'strength-bar';
+
+            if (password.length === 0) {
+                passwordHint.textContent = 'Gunakan kombinasi huruf, angka, dan simbol';
+                passwordHint.style.color = '';
+                return;
+            }
+
+            // Check password strength
+            if (password.length >= 8) strength++;
+            if (password.match(/[a-z]/) && password.match(/[A-Z]/)) strength++;
+            if (password.match(/[0-9]/)) strength++;
+            if (password.match(/[^a-zA-Z0-9]/)) strength++;
+
+            // Apply appropriate class
+            if (strength <= 2) {
+                strengthBar.classList.add('strength-weak');
+                passwordHint.textContent = 'Password lemah - tambahkan huruf kapital & angka';
+                passwordHint.style.color = '#e74c3c';
+            } else if (strength === 3) {
+                strengthBar.classList.add('strength-medium');
+                passwordHint.textContent = 'Password sedang - tambahkan simbol untuk lebih kuat';
+                passwordHint.style.color = '#f39c12';
+            } else {
+                strengthBar.classList.add('strength-strong');
+                passwordHint.textContent = 'Password kuat! ✓';
+                passwordHint.style.color = '#2ecc71';
+            }
+        });
+
+        // Password match checker (hanya visual)
+        const confirmPasswordInput = document.getElementById('confirm_password');
+        const passwordMatch = document.getElementById('passwordMatch');
+
+        confirmPasswordInput.addEventListener('input', function() {
+            const password = passwordInput.value;
+            const confirmPassword = this.value;
+
+            if (confirmPassword.length === 0) {
+                passwordMatch.textContent = '';
+                passwordMatch.className = 'password-match';
+                return;
+            }
+
+            if (password === confirmPassword) {
+                passwordMatch.textContent = '✓ Password cocok';
+                passwordMatch.className = 'password-match success';
+            } else {
+                passwordMatch.textContent = '✗ Password tidak cocok';
+                passwordMatch.className = 'password-match error';
+            }
+        });
+
+        // Form validation before submit
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            const password = passwordInput.value;
+            const confirmPassword = confirmPasswordInput.value;
+            
+            // Validate passwords match
+            if (password !== confirmPassword) {
+                e.preventDefault();
+                alert('Password dan konfirmasi password tidak cocok!');
+                return false;
+            }
+
+            // Validate password length
+            if (password.length < 8) {
+                e.preventDefault();
+                alert('Password harus minimal 8 karakter!');
+                return false;
+            }
+
+            // Jika semua validasi lolos, form akan dikirim ke server
+            // Tidak ada e.preventDefault() di sini
+        });
+
+        // Phone number formatting (hanya visual)
+        const phoneInput = document.getElementById('phone');
+        phoneInput.addEventListener('input', function() {
+            // Remove non-numeric characters
+            this.value = this.value.replace(/[^0-9]/g, '');
+        });
+    </script>
+</body>
+</html>
