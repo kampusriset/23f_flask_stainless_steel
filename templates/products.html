@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Produk - Bimantara Stainless Steel</title>
+    <link
+      rel="stylesheet"
+      href="{{url_for('static', filename='styles/product.css')}}"
+    />
+  </head>
+  <body>
+    <!-- Navigation Bar -->
+    <nav class="nav-bar">
+      <img
+        id="logo"
+        src="{{url_for('static', filename='images/logo.png')}}"
+        alt="Bimantara Logo"
+      />
+  <div class="nav-actions">
+    <a href="{{url_for('index')}}">Home</a>
+    <a href="{{url_for('profile')}}">Profil</a>
+    <a href="{{ url_for('profile') }}#section-cart">Keranjang</a>
+  </div>
+    </nav>
+
+    <!-- Products Section -->
+    <main class="produk-page">
+      <div class="container">
+        <div class="produk-header">
+          <h2 class="section-title">Koleksi Produk Kami</h2>
+          <p class="section-subtitle">Dandang kukus berkualitas tinggi dengan berbagai ukuran</p>
+        </div>
+
+        <div class="produk-grid">
+          {% for product in products %}
+          <article class="produk-card">
+            {% if loop.index == 2 %}
+              <div class="produk-badge recommended">Recommended</div>
+            {% elif loop.index == 1 %}
+              <div class="produk-badge">Best Seller</div>
+            {% else %}
+              <div class="produk-badge">Professional</div>
+            {% endif %}
+            
+            <div class="produk-image">
+              <img src="{{url_for('static', filename='images/dandangnobg.PNG')}}" alt="Dandang {{ product['name'] }}" />
+            </div>
+            
+            <div class="produk-info">
+              <h3>{{ product['name'] }}</h3>
+              <p>
+                {% if loop.index == 1 %}
+                  Cocok untuk kebutuhan rumah tangga sehari-hari
+                {% elif loop.index == 2 %}
+                  Ideal untuk usaha kecil menengah dan keluarga besar
+                {% else %}
+                  Untuk kebutuhan produksi besar dan industri
+                {% endif %}
+              </p>
+              
+              <div class="produk-features">
+                <span>✓ Food Grade</span>
+                <span>✓ Anti Karat</span>
+                {% if loop.index == 2 %}
+                  <span>✓ Kapasitas Besar</span>
+                {% elif loop.index == 3 %}
+                  <span>✓ Industrial Grade</span>
+                {% endif %}
+              </div>
+              
+              <div class="produk-price-section">
+                <span class="produk-price">Rp {{ "{:,.0f}".format(product['price']) }}</span>
+                <div class="produk-actions">
+                  <a href="{{ url_for('checkout', produk=product['slug']) }}" class="btn-produk btn-detail">Pesan Langsung</a>
+                  
+                  <form action="{{ url_for('add_to_cart') }}" method="post" class="cart-form">
+                    <input type="hidden" name="slug" value="{{ product['slug'] }}">
+                    <div class="qty-input-group">
+                      <label for="qty-{{ product['slug'] }}">Qty:</label>
+                      <input type="number" id="qty-{{ product['slug'] }}" name="quantity" value="1" min="1" class="qty-input" />
+                    </div>
+                    <button type="submit" class="btn-produk btn-cart">
+                      <span class="cart-icon">🛒</span>
+                      Tambah
+                    </button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </article>
+          {% endfor %}
+        </div>
+
+        <!-- Features Banner -->
+        <div class="features-section">
+          <div class="features-grid">
+            <div class="feature-item">
+              <div class="feature-icon">✓</div>
+              <div class="feature-text">
+                <h4>Kualitas Terjamin</h4>
+                <p>Material stainless steel premium</p>
+              </div>
+            </div>
+            <div class="feature-item">
+              <div class="feature-icon">✓</div>
+              <div class="feature-text">
+                <h4>Tahan Lama</h4>
+                <p>Awet untuk penggunaan bertahun-tahun</p>
+              </div>
+            </div>
+            <div class="feature-item">
+              <div class="feature-icon">✓</div>
+              <div class="feature-text">
+                <h4>Garansi Resmi</h4>
+                <p>Jaminan kepuasan pelanggan</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-brand">
+            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo BIMANTARA" class="footer-logo">
+            <h3>BIMANTARA STAINLESS STEEL</h3>
+            <p>Produsen dandang kukus berkualitas tinggi</p>
+          </div>
+        </div>
+      </div>
+    </footer>
+    
+  </body>
+</html>
