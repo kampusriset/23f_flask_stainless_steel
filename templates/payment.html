@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pembayaran - Bimantara Stainless Steel</title>
+    <link
+      rel="stylesheet"
+      href="{{url_for('static', filename='styles/payment.css')}}"
+    />
+  </head>
+  <body>
+    <!-- Navigation Bar -->
+    <nav class="nav-bar">
+      <img
+        id="logo"
+        src="{{url_for('static', filename='images/logo.png')}}"
+        alt="Bimantara Logo"
+      />
+      <div class="nav-actions">
+        <a href="{{url_for('product')}}">Shop</a>
+      </div>
+    </nav>
+
+    <main class="payment-main">
+      <div class="payment-container">
+        <!-- Progress Steps -->
+        <div class="progress-steps">
+          <div class="step completed">
+            <div class="step-circle">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+            </div>
+            <span class="step-label">Data Pesanan</span>
+          </div>
+          <div class="step-line completed"></div>
+          <div class="step active">
+            <div class="step-circle">2</div>
+            <span class="step-label">Pembayaran</span>
+          </div>
+          <div class="step-line"></div>
+          <div class="step">
+            <div class="step-circle">3</div>
+            <span class="step-label">Selesai</span>
+          </div>
+        </div>
+
+        <!-- Payment Card -->
+        <div class="qr-card">
+          <div class="card-header">
+            <div class="payment-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+                <line x1="1" y1="10" x2="23" y2="10"></line>
+              </svg>
+            </div>
+            <h1 class="card-title">Pembayaran</h1>
+            <p class="card-subtitle">Scan QR Code untuk menyelesaikan pembayaran</p>
+          </div>
+
+          <div class="qr-section">
+            <div class="qr-wrapper">
+              <img 
+                src="{{url_for('static', filename='images/qr.svg')}}" 
+                alt="QR Code Pembayaran"
+                class="qr-image"
+              />
+              <div class="qr-overlay">
+                <div class="scan-line"></div>
+              </div>
+            </div>
+            <p class="qr-instruction">Gunakan aplikasi pembayaran Anda untuk scan</p>
+          </div>
+
+          <div class="payment-details">
+            <div class="detail-row">
+              <span class="detail-label">Produk:</span>
+              <span class="detail-value">{{ payment_data.product_name }}</span>
+            </div>
+            <div class="detail-divider"></div>
+            <div class="detail-row total-row">
+              <span class="detail-label">Total Pembayaran:</span>
+              <span class="detail-value total-amount">
+                Rp {{ '{:,.0f}'.format(payment_data.total_price + 10000) }}
+              </span>
+            </div>
+            <div class="tax-info">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="16" x2="12" y2="12"></line>
+                <line x1="12" y1="8" x2="12.01" y2="8"></line>
+              </svg>
+              <span>Termasuk Ongkos Kirim</span>
+            </div>
+          </div>
+
+          <a href="{{url_for('invoice')}}" class="payment-button">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+            <span>Saya Sudah Bayar</span>
+          </a>
+
+          <div class="payment-note">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+              <line x1="12" y1="9" x2="12" y2="13"></line>
+              <line x1="12" y1="17" x2="12.01" y2="17"></line>
+            </svg>
+            <p>Mohon selesaikan pembayaran dalam <strong>15 menit</strong></p>
+          </div>
+        </div>
+
+        <!-- Help Section -->
+        <div class="help-section">
+          <h3>Butuh Bantuan?</h3>
+          <p>Hubungi customer service kami di <strong>+62 878-3162-0154</strong></p>
+        </div>
+      </div>
+    </main>
+
+<!-- Footer -->
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-brand">
+            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo BIMANTARA" class="footer-logo">
+            <h3>BIMANTARA STAINLESS STEEL</h3>
+            <p>Produsen dandang kukus berkualitas tinggi</p>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      let timeLeft = 900; // 15 minutes in seconds
+      
+      function updateTimer() {
+        const minutes = Math.floor(timeLeft / 60);
+        const seconds = timeLeft % 60;
+        const noteElement = document.querySelector('.payment-note strong');
+        
+        if (noteElement && timeLeft > 0) {
+          noteElement.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+          timeLeft--;
+        }
+      }
+      
+      // Update timer every second
+      setInterval(updateTimer, 1000);
+    </script>
+  </body>
+</html>
