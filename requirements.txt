@@ -1,0 +1,4 @@
+Flask==2.3.3
+PyMySQL==1.1.0
+bcrypt==4.0.1
+fpdf==1.7.2
