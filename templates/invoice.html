@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Invoice - Bimantara Stainless Steel</title>
+    <link
+      rel="stylesheet"
+      href="{{url_for('static', filename='styles/invoice.css')}}"
+    />
+  </head>
+  <body>
+    <nav class="nav-bar">
+      <img
+        id="logo"
+        src="{{url_for('static', filename='images/logo.png')}}"
+        alt="logo"
+      />
+      <div class="nav-actions">
+        <a href="{{url_for('index')}}">Home</a>
+        <a href="{{url_for('product')}}">Shop</a>
+        <a href="{{url_for('profile')}}">Profil</a>
+      </div>
+    </nav>
+
+    <main class="invoice-main">
+      <!-- Progress Steps -->
+      <div class="progress-steps">
+        <div class="step completed">
+          <div class="step-circle">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+          </div>
+          <span class="step-label">Data Pesanan</span>
+        </div>
+        <div class="step-line completed"></div>
+        <div class="step completed">
+          <div class="step-circle">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+          </div>
+          <span class="step-label">Pembayaran</span>
+        </div>
+        <div class="step-line completed"></div>
+        <div class="step completed">
+          <div class="step-circle">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+          </div>
+          <span class="step-label">Selesai</span>
+        </div>
+      </div>
+
+      <div class="invoice-container">
+        <!-- Success Banner -->
+        <div class="success-banner">
+          <div class="success-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+              <polyline points="22 4 12 14.01 9 11.01"></polyline>
+            </svg>
+          </div>
+          <h2 class="success-title">Pembayaran Berhasil!</h2>
+          <p class="success-subtitle">Terima kasih atas pembelian Anda</p>
+        </div>
+
+        <!-- Invoice Card -->
+        <div class="invoice">
+          <div class="invoice-brand">
+            <img
+              src="{{url_for('static', filename='images/logo.png')}}"
+              alt="Bimantara Logo"
+              class="invoice-logo"
+            />
+            <div class="invoice-title-section">
+              <h2 class="invoice-title">INVOICE</h2>
+              <p class="invoice-number">#{{invoice_data.kd_order}}</p>
+            </div>
+          </div>
+
+          <!-- Important Notice -->
+          <div class="notice-box">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="12" y1="16" x2="12" y2="12"></line>
+              <line x1="12" y1="8" x2="12.01" y2="8"></line>
+            </svg>
+            <span>Harap simpan kode pembelian Anda untuk referensi!</span>
+          </div>
+
+          <!-- Invoice Info Section -->
+          <div class="invoice-header">
+            <div class="info-card">
+              <h3 class="info-title">Informasi Pesanan</h3>
+              <div class="info-item">
+                <span class="info-label">Kode Pembelian:</span>
+                <span class="info-value highlight">{{invoice_data.kd_order}}</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Tanggal:</span>
+                <span class="info-value">4 Februari 2025</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Status:</span>
+                <span class="status-badge">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                  Dibayar
+                </span>
+              </div>
+            </div>
+
+            <div class="info-card">
+              <h3 class="info-title">Informasi Pelanggan</h3>
+              <div class="info-item">
+                <span class="info-label">Nama:</span>
+                <span class="info-value">{{invoice_data.customer_name}}</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Alamat:</span>
+                <span class="info-value">{{invoice_data.address}}</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Kontak:</span>
+                <span class="info-value">{{invoice_data.contact}}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Product Table -->
+          <div class="table-wrapper">
+            <table class="invoice-table">
+              <thead>
+                <tr>
+                  <th>Deskripsi Produk</th>
+                  <th>Jumlah</th>
+                  <th>Harga Satuan</th>
+                  <th>Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% if invoice_data.cart_items is defined and invoice_data.cart_items %}
+                  {% for item in invoice_data.cart_items %}
+                    <tr>
+                      <td class="product-name">{{ item.name }}</td>
+                      <td>{{ item.quantity }} pcs</td>
+                      <td>Rp {{ item.price|default(0)|currency }}</td>
+                      <td class="amount">Rp {{ item.line_total|default(0)|currency }}</td>
+                    </tr>
+                  {% endfor %}
+                {% else %}
+                  <tr>
+                    <td class="product-name">{{ invoice_data.product_name }}</td>
+                    <td>{{ invoice_data.quantity }} pcs</td>
+                    <td>Rp {{ invoice_data.price|default(0)|currency }}</td>
+                    <td class="amount">Rp {{ invoice_data.total_price|default(0)|currency }}</td>
+                  </tr>
+                {% endif %}
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Total Section -->
+          <div class="total-section">
+            <div class="total-row">
+              <span class="total-label">Subtotal :</span>
+              <span class="total-value">Rp {{'{:,.0f}'.format(invoice_data.total_price)}}</span>
+            </div>
+            <div class="total-row">
+              <span class="total-label">Ongkos Kirim :</span>
+              <span class="total-value">Rp {{'{:,.0f}'.format(10000)}}</span>
+            </div>
+            <div class="total-divider"></div>
+            <div class="total-row grand-total">
+              <span class="total-label">Total Pembayaran :</span>
+              <span class="total-value">Rp {{'{:,.0f}'.format(invoice_data.total_price + 10000)}}</span>
+            </div>
+          </div>
+
+          <!-- Footer Note -->
+          <div class="invoice-footer">
+            <p class="footer-text">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+              </svg>
+              Terima kasih telah berbelanja di <strong>Bimantara Stainless Steel</strong>
+            </p>
+            <p class="footer-note">Pesanan Anda akan segera diproses dan dikirim.</p>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+          <button class="action-btn btn-print" onclick="window.print()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="6 9 6 2 18 2 18 9"></polyline>
+              <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+              <rect x="6" y="14" width="12" height="8"></rect>
+            </svg>
+            <span>Cetak Invoice</span>
+          </button>
+          <a href="{{ url_for('profile') }}#section-orders" class="action-btn btn-orders">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <path d="M16 10a4 4 0 0 1-8 0"></path>
+            </svg>
+            <span>Lihat Pesanan Saya</span>
+          </a>
+          <a href="{{url_for('index')}}" class="action-btn btn-home">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+              <polyline points="9 22 9 12 15 12 15 22"></polyline>
+            </svg>
+            <span>Kembali ke Home</span>
+          </a>
+        </div>
+      </div>
+    </main>
+
+<!-- Footer -->
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-brand">
+            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo BIMANTARA" class="footer-logo">
+            <h3>BIMANTARA STAINLESS STEEL</h3>
+            <p>Produsen dandang kukus berkualitas tinggi</p>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      // Add print-friendly class when printing
+      window.onbeforeprint = function() {
+        document.body.classList.add('printing');
+      };
+      
+      window.onafterprint = function() {
+        document.body.classList.remove('printing');
+      };
+    </script>
+  </body>
+</html>

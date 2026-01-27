@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Profil - BIMANTARA STAINLESS STEEL</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{url_for('static', filename='styles/profile.css')}}">
+</head>
+
+<body>
+  <!-- Sidebar -->
+  <aside class="profile-sidebar" aria-label="Menu Profil">
+    <div class="sidebar-header">
+      <div class="profile-avatar">
+        <i class="fas fa-user"></i>
+      </div>
+      <h3 class="profile-name">{{ user['name'] }}</h3>
+      <p class="sidebar-email">{{ user['email'] }}</p>
+    </div>
+
+    <nav class="profile-menu">
+      <div class="menu-section">
+        <h4 class="menu-section-title">Menu Utama</h4>
+        <a href="{{ url_for('index') }}" class="menu-link">
+          <i class="fas fa-home"></i> Home
+        </a>
+        <a href="{{ url_for('product') }}" class="menu-link">
+          <i class="fas fa-store"></i> Shop
+        </a>
+        <a href="#section-cart" class="menu-link" id="link-cart" data-fallback="{{ url_for('profile') }}#section-cart">
+          <i class="fas fa-shopping-cart"></i> Keranjang
+          <span class="cart-badge" id="cart-badge">0</span>
+        </a>
+      </div>
+
+      <div class="menu-section">
+        <h4 class="menu-section-title">Akun Saya</h4>
+        <a href="#section-profile" class="menu-link active" id="link-profile">
+          <i class="fas fa-user"></i> Profil Saya
+        </a>
+        <a href="#section-orders" class="menu-link" id="link-orders">
+          <i class="fas fa-box"></i> Pesanan Saya
+        </a>
+      </div>
+
+      <div class="menu-section">
+        <h4 class="menu-section-title">Lainnya</h4>
+        <a href="{{ url_for('logout') }}" class="menu-link logout-link">
+          <i class="fas fa-sign-out-alt"></i> Logout
+        </a>
+      </div>
+    </nav>
+  </aside>
+
+  <!-- Main Content Area -->
+  <main class="profile-main">
+    <!-- Top Navigation -->
+    <nav class="nav-bar">
+      <h1>Dashboard Profil</h1>
+      <div class="nav-actions">
+        <div class="nav-user">
+          <div class="nav-user-info">
+            <div class="nav-user-name">{{ user['name'] }}</div>
+            <div class="nav-user-role">Pelanggan</div>
+          </div>
+          <div class="nav-avatar">{{ user['name'][0].upper() }}</div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Profile Container -->
+    <div class="profile-container">
+      <!-- Stats Cards removed -->
+
+      <!-- Profile Content -->
+      <div class="profile-content">
+        <!-- Profile Information -->
+        <section class="profile-card" id="section-profile">
+          <div class="section-header">
+            <h2>Informasi Profil</h2>
+            <button type="button" class="btn btn-outline" id="toggle-edit">
+              <i class="fas fa-edit"></i> Edit Profil
+            </button>
+          </div>
+          
+          <div class="profile-info-grid" id="info-display">
+            <div class="info-item">
+              <div class="info-label">
+                <i class="fas fa-user"></i> Nama Lengkap
+              </div>
+              <div class="info-value">{{ user['name'] }}</div>
+            </div>
+            
+            <div class="info-item">
+              <div class="info-label">
+                <i class="fas fa-envelope"></i> Email
+              </div>
+              <div class="info-value">{{ user['email'] }}</div>
+            </div>
+            
+            <div class="info-item">
+              <div class="info-label">
+                <i class="fas fa-phone"></i> Nomor Telepon
+              </div>
+              <div class="info-value">{{ user['phone'] }}</div>
+            </div>
+            
+            <div class="info-item full">
+              <div class="info-label">
+                <i class="fas fa-map-marker-alt"></i> Alamat
+              </div>
+              <div class="info-value">{{ user['address'] }}</div>
+            </div>
+          </div>
+
+          <form action="{{ url_for('profile') }}" method="POST" class="profile-form" id="edit-form" style="display:none;">
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="name" class="form-label">
+                  <i class="fas fa-user"></i> Nama Lengkap
+                </label>
+                <input type="text" id="name" name="name" class="form-input" value="{{ user['name'] }}" required>
+              </div>
+              <div class="form-group">
+                <label for="phone" class="form-label">
+                  <i class="fas fa-phone"></i> Nomor Telepon
+                </label>
+                <input type="tel" id="phone" name="phone" class="form-input" value="{{ user['phone'] }}" required>
+              </div>
+              <div class="form-group full">
+                <label for="address" class="form-label">
+                  <i class="fas fa-map-marker-alt"></i> Alamat
+                </label>
+                <textarea id="address" name="address" class="form-input" rows="3" required>{{ user['address'] }}</textarea>
+              </div>
+            </div>
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary">
+                <i class="fas fa-save"></i> Simpan Perubahan
+              </button>
+              <button type="button" class="btn btn-outline" id="cancel-edit">
+                <i class="fas fa-times"></i> Batal
+              </button>
+            </div>
+          </form>
+
+        </section>
+
+          <!-- Cart Section (embedded) -->
+          <section class="cart-section" id="section-cart" style="display:none;">
+            <div class="section-header">
+              <h2>Keranjang Saya</h2>
+            </div>
+
+            {% if not cart %}
+              <div class="empty-state">
+                <i class="fas fa-shopping-cart"></i>
+                <h3>Keranjang kosong</h3>
+                <p>Mulai belanja sekarang</p>
+                <a href="{{ url_for('product') }}" class="btn btn-primary">
+                  <i class="fas fa-shopping-bag"></i> Belanja sekarang
+                </a>
+              </div>
+            {% else %}
+              <div class="orders-list">
+                {% for slug, item in cart.items() %}
+                <div class="order-card">
+                  <div class="order-header">
+                    <div class="order-id">
+                      <i class="fas fa-box"></i>
+                      <strong>{{ item['name'] }}</strong>
+                    </div>
+                    <div class="order-qty">Jumlah: {{ item['quantity'] }} pcs</div>
+                  </div>
+                  <div class="order-body">
+                    <div class="order-product">
+                      <div class="order-product-info">
+                        <h4>{{ item['name'] }}</h4>
+                        <p>Harga: Rp {{ '{:,.0f}'.format(item['price']) }}</p>
+                      </div>
+                      <div class="order-product-price">
+                        <strong>Rp {{ '{:,.0f}'.format(item['price'] * item['quantity']) }}</strong>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="order-footer">
+                    <div class="order-date">
+                      <form action="{{ url_for('remove_from_cart') }}" method="post" style="display:inline">
+                        <input type="hidden" name="slug" value="{{ slug }}">
+                        <button type="submit" class="btn btn-outline">Hapus</button>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+                {% endfor %}
+
+                <div class="cart-summary">
+                  <p>Subtotal: <strong>Rp {{ '{:,.0f}'.format(subtotal) }}</strong></p>
+                  <a href="{{ url_for('checkout_cart') }}" class="btn btn-primary">Checkout Semua</a>
+                </div>
+              </div>
+            {% endif %}
+          </section>
+
+          <!-- Daftar Pesanan -->
+        <section class="orders-section" id="section-orders" style="display:none;">
+          <div class="section-header">
+            <h2>Daftar Pesanan Saya</h2>
+          </div>
+          
+          {% if not orders %}
+            <div class="empty-state">
+              <i class="fas fa-box-open"></i>
+              <h3>Belum Ada Pesanan</h3>
+              <p>Anda belum memiliki riwayat pesanan. Mulai belanja sekarang!</p>
+              <a href="{{ url_for('product') }}" class="btn btn-primary">
+                <i class="fas fa-shopping-bag"></i> Mulai Belanja
+              </a>
+            </div>
+          {% else %}
+            <div class="orders-list">
+              {% for o in orders %}
+              <div class="order-card">
+                <div class="order-header">
+                  <div class="order-id">
+                    <i class="fas fa-receipt"></i>
+                    <strong>{{ o['kd_order'] }}</strong>
+                  </div>
+                  <span class="status-badge status-{{ o['status']|lower }}">
+                    {{ o['status']|title }}
+                  </span>
+                </div>
+                <div class="order-body">
+                  <div class="order-product">
+                    <div class="order-product-info">
+                      <h4>{{ o['product_name'] }}</h4>
+                      <p>Jumlah: {{ o['quantity'] }} pcs</p>
+                    </div>
+                    <div class="order-product-price">
+                      <strong>Rp {{ "{:,.0f}".format(o['total_price']).replace(',', '.') }}</strong>
+                    </div>
+                  </div>
+                </div>
+                <div class="order-footer">
+                  <div class="order-date">
+                    <i class="fas fa-calendar-alt"></i>
+                    {{ o['created_at'].strftime('%d/%m/%Y %H:%M') }}
+                  </div>
+                </div>
+              </div>
+              {% endfor %}
+            </div>
+          {% endif %}
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // Active menu management
+    (function() {
+      const links = document.querySelectorAll('.profile-menu .menu-link');
+      const anchorLinks = document.querySelectorAll('.profile-menu a[href^="#"]');
+      const sections = {
+        '#section-profile': document.getElementById('section-profile'),
+        '#section-cart': document.getElementById('section-cart'),
+        '#section-orders': document.getElementById('section-orders')
+      };
+      
+      function setActive(hash) {
+        links.forEach(l => l.classList.remove('active'));
+        
+        // Hide all sections
+        Object.values(sections).forEach(s => {
+          if (s) s.style.display = 'none';
+        });
+        
+        // Default to profile
+        if (!hash || hash === '#section-profile') {
+          document.getElementById('link-profile')?.classList.add('active');
+          if (sections['#section-profile']) sections['#section-profile'].style.display = 'block';
+          return;
+        }
+        
+        // Show selected section
+        const map = {
+          '#section-profile': 'link-profile',
+          '#section-cart': 'link-cart',
+          '#section-orders': 'link-orders'
+        };
+        const id = map[hash];
+        const el = document.getElementById(id);
+        if (el) el.classList.add('active');
+        if (sections[hash]) sections[hash].style.display = 'block';
+      }
+
+      anchorLinks.forEach(l => {
+        l.addEventListener('click', (e) => {
+          e.preventDefault();
+          const hash = l.getAttribute('href');
+          history.pushState(null, null, hash);
+          setActive(hash);
+        });
+      });
+
+      // Handle initial load and navigation
+      setActive(location.hash);
+      window.addEventListener('hashchange', () => setActive(location.hash));
+
+      // Edit form toggle
+      const toggleBtn = document.getElementById('toggle-edit');
+      const cancelBtn = document.getElementById('cancel-edit');
+      const form = document.getElementById('edit-form');
+      const infoDisplay = document.getElementById('info-display');
+      
+      if (toggleBtn && form && infoDisplay) {
+        toggleBtn.addEventListener('click', () => {
+          form.style.display = 'block';
+          infoDisplay.style.display = 'none';
+          toggleBtn.style.display = 'none';
+        });
+      }
+      
+      if (cancelBtn && form && infoDisplay) {
+        cancelBtn.addEventListener('click', () => {
+          form.style.display = 'none';
+          infoDisplay.style.display = 'grid';
+          toggleBtn.style.display = 'block';
+        });
+      }
+    })();
+  </script>
+</body>
+</html>
