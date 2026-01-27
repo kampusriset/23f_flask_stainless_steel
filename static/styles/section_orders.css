@@ -1,0 +1,297 @@
+/* ==================== ORDERS MANAGEMENT SECTION ==================== */
+
+/* Page Header */
+.page-header {
+    margin-bottom: 2.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 2px solid rgba(0, 102, 102, 0.1);
+}
+
+.page-title {
+    font-size: 2rem;
+    color: var(--primary-color);
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.page-subtitle {
+    font-size: 1.1rem;
+    color: var(--text-light);
+    font-weight: 400;
+}
+
+/* Orders Table Container */
+.user-table-container {
+    background: white;
+    border-radius: 24px;
+    padding: 2rem;
+    box-shadow: var(--shadow-md);
+    border: 1px solid rgba(0, 102, 102, 0.06);
+    overflow-x: auto;
+}
+
+/* Table Styles */
+.user-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: 1rem;
+}
+
+.user-table thead {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+}
+
+.user-table thead tr th {
+    padding: 1.25rem 1.5rem;
+    text-align: left;
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: white;
+    border: none;
+}
+
+.user-table thead tr th:first-child {
+    border-top-left-radius: 16px;
+}
+
+.user-table thead tr th:last-child {
+    border-top-right-radius: 16px;
+}
+
+.user-table tbody tr {
+    transition: var(--transition-smooth);
+    border-bottom: 1px solid rgba(0, 102, 102, 0.08);
+}
+
+.user-table tbody tr:last-child {
+    border-bottom: none;
+}
+
+.user-table tbody tr:hover {
+    background: linear-gradient(90deg, rgba(0, 102, 102, 0.03), transparent);
+    transform: translateX(4px);
+}
+
+.user-table tbody tr td {
+    padding: 1.25rem 1.5rem;
+    color: var(--text-dark);
+    font-weight: 400;
+    vertical-align: middle;
+}
+
+.user-table tbody tr td:first-child {
+    font-weight: 600;
+    color: var(--secondary-color);
+    width: 60px;
+}
+
+.user-table tbody tr td strong {
+    color: var(--primary-color);
+    font-weight: 700;
+}
+
+/* Status Select Dropdown */
+.role-select {
+    padding: 0.6rem 1rem;
+    border: 2px solid rgba(0, 102, 102, 0.15);
+    border-radius: 10px;
+    font-size: 0.95rem;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+    color: var(--text-dark);
+    background: white;
+    cursor: pointer;
+    transition: var(--transition-smooth);
+    min-width: 130px;
+    margin-right: 0.75rem;
+}
+
+.role-select:hover {
+    border-color: var(--secondary-color);
+    box-shadow: 0 0 0 3px rgba(0, 128, 128, 0.08);
+}
+
+.role-select:focus {
+    outline: none;
+    border-color: var(--secondary-color);
+    box-shadow: 0 0 0 4px rgba(0, 128, 128, 0.1);
+}
+
+.role-select option {
+    padding: 0.5rem;
+    font-weight: 500;
+}
+
+/* Update Button */
+.btn-update {
+    padding: 0.5rem 1.5rem;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    border: none;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+    transition: var(--transition-smooth);
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    box-shadow: 0 3px 12px rgba(0, 102, 102, 0.15);
+}
+
+.btn-update:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 102, 102, 0.25);
+}
+
+.btn-update:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(0, 102, 102, 0.2);
+}
+
+/* Status Badges */
+.status-badge {
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    display: inline-block;
+    min-width: 100px;
+    text-align: center;
+    text-transform: capitalize;
+}
+
+.status-pending {
+    background: #fff3cd;
+    color: #856404;
+    border: 1px solid #ffeaa7;
+}
+
+.status-processing {
+    background: #cfe2ff;
+    color: #084298;
+    border: 1px solid #b6d4fe;
+}
+
+.status-completed {
+    background: #d1e7dd;
+    color: #0f5132;
+    border: 1px solid #badbcc;
+}
+
+.status-cancelled {
+    background: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+/* ==================== RESPONSIVE DESIGN - ORDERS TABLE ==================== */
+@media (max-width: 1024px) {
+    .user-table-container {
+        padding: 1.5rem;
+    }
+
+    .user-table thead tr th,
+    .user-table tbody tr td {
+        padding: 1rem 1.25rem;
+        font-size: 0.95rem;
+    }
+
+    .role-select {
+        min-width: 110px;
+        font-size: 0.9rem;
+    }
+
+    .btn-update {
+        padding: 0.5rem 1.25rem;
+        font-size: 0.85rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .page-header {
+        margin-bottom: 2rem;
+    }
+
+    .page-title {
+        font-size: 1.6rem;
+    }
+
+    .page-subtitle {
+        font-size: 1rem;
+    }
+
+    .user-table-container {
+        padding: 1rem;
+        border-radius: 16px;
+    }
+
+    /* Make table scrollable horizontally on mobile */
+    .user-table {
+        min-width: 800px;
+    }
+
+    .user-table thead tr th,
+    .user-table tbody tr td {
+        padding: 0.85rem 1rem;
+        font-size: 0.9rem;
+    }
+
+    .role-select {
+        min-width: 100px;
+        padding: 0.5rem 0.75rem;
+        font-size: 0.85rem;
+        margin-right: 0.5rem;
+    }
+
+    .btn-update {
+        padding: 0.5rem 1rem;
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .page-title {
+        font-size: 1.4rem;
+    }
+
+    .page-subtitle {
+        font-size: 0.95rem;
+    }
+
+    .user-table-container {
+        padding: 0.75rem;
+    }
+
+    .user-table {
+        min-width: 700px;
+    }
+
+    .user-table thead tr th,
+    .user-table tbody tr td {
+        padding: 0.75rem 0.85rem;
+        font-size: 0.85rem;
+    }
+
+    /* Keep status select and button inline on very small screens */
+    .user-table tbody tr td form {
+        display: flex !important;
+        flex-direction: row !important;
+        gap: 0.5rem;
+        align-items: center;
+        flex-wrap: nowrap;
+        white-space: nowrap;
+    }
+
+    .role-select {
+        margin-right: 0;
+        flex: 1;
+        min-width: 120px;
+    }
+
+    .btn-update {
+        flex-shrink: 0;
+        width: auto;
+    }
+}
