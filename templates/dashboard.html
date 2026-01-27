@@ -1,0 +1,996 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Admin - BIMANTARA STAINLESS STEEL</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{url_for('static', filename='styles/dashboard.css') }}">
+    <link rel="stylesheet" href="{{url_for('static', filename='styles/section_products.css')}}"/>
+    <link rel="stylesheet" href="{{url_for('static', filename='styles/section_orders.css')}}"/>
+    <link rel="stylesheet" href="{{url_for('static', filename='styles/section_users.css')}}"/>
+    <link rel="stylesheet" href="{{url_for('static', filename='styles/section_laporan.css')}}"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <aside class="admin-sidebar" aria-label="Menu Admin">
+        <div class="sidebar-header">
+            <div class="admin-avatar">
+                {{ session.name[0].upper() if session.name else 'A' }}
+            </div>
+            <h3 class="admin-name">{{ session.name }}</h3>
+            <p class="admin-role">Administrator</p>
+        </div>
+
+        <nav class="sidebar-menu">
+            <div class="menu-section">
+                <h4 class="menu-section-title">Menu Utama</h4>
+                <a href="#section-dashboard" class="menu-link active" id="link-dashboard">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-width="2">
+                        <rect x="3" y="3" width="7" height="7"></rect>
+                        <rect x="14" y="3" width="7" height="7"></rect>
+                        <rect x="14" y="14" width="7" height="7"></rect>
+                        <rect x="3" y="14" width="7" height="7"></rect>
+                    </svg>
+                    Dashboard
+                </a>
+                <a href="#section-products" class="menu-link" id="link-products">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-width="2">
+                        <path d="M20 7L12 3L4 7M20 7V17L12 21M20 7L12 11M12 21L4 17V7M12 21V11M4 7L12 11"/>
+                    </svg>
+                    Kelola Produk
+                </a>
+                <a href="#section-orders" class="menu-link">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-width="2">
+                        <path d="M9 5H7C5.89543 5 5 5.89543 5 7V19C5 20.1046 5.89543 21 7 21H17C18.1046 21 19 20.1046 19 19V7C19 5.89543 18.1046 5 17 5H15M9 5C9 6.10457 9.89543 7 11 7H13C14.1046 7 15 6.10457 15 5M9 5C9 3.89543 9.89543 3 11 3H13C14.1046 3 15 3.89543 15 5M12 12H15M12 16H15M9 12H9.01M9 16H9.01"/>
+                    </svg>
+                    Kelola Pesanan
+                </a>
+                <a href="#section-laporan" class="menu-link">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-width="2">
+                        <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                    </svg>
+                    Laporan Penjualan
+                </a>
+            </div>
+
+            <div class="menu-section">
+                <h4 class="menu-section-title">Sistem</h4>
+                <a href="#section-users" class="menu-link">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-width="2">
+                        <path d="M17 20H22V18C22 16.3431 20.6569 15 19 15C18.0444 15 17.1931 15.4468 16.6438 16.1429M13 7C13 9.20914 11.2091 11 9 11C6.79086 11 5 9.20914 5 7C5 4.79086 6.79086 3 9 3C11.2091 3 13 4.79086 13 7ZM3 20C3 16.134 6.13401 13 10 13C13.866 13 17 16.134 17 20V20H3V20Z"/>
+                    </svg>
+                    Kelola User
+                </a>
+                <a href="{{ url_for('index') }}" class="menu-link">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-width="2">
+                        <path d="M3 12L5 10M5 10L12 3L19 10M5 10V20C5 20.5523 5.44772 21 6 21H9M19 10L21 12M19 10V20C19 20.5523 18.5523 21 18 21H15M9 21C9.55228 21 10 20.5523 10 20V16C10 15.4477 10.4477 15 11 15H13C13.5523 15 14 15.4477 14 16V20C14 20.5523 14.4477 21 15 21M9 21H15"/>
+                    </svg>
+                    Lihat Website
+                </a>
+            </div>
+
+            <div class="menu-section">
+                <h4 class="menu-section-title">Akun</h4>
+                <a href="{{ url_for('logout') }}" class="menu-link logout-link">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-width="2">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                        <polyline points="16 17 21 12 16 7"></polyline>
+                        <line x1="21" y1="12" x2="9" y2="12"></line>
+                    </svg>
+                    Logout
+                </a>
+            </div>
+        </nav>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="dashboard-main">
+        <!-- Top Navigation -->
+        <nav class="top-bar">
+            <h1>Dashboard Admin</h1>
+            <div class="top-bar-date">
+                <span id="current-date"></span>
+            </div>
+        </nav>
+
+        <!-- Dashboard Container -->
+        <div class="dashboard-container">
+            <!-- Dashboard Section (default) -->
+            <section id="section-dashboard" class="dashboard-section">
+                <!-- Dashboard Header -->
+                <div class="dashboard-header">
+                    <div class="header-content">
+                        <h2>Selamat Datang, {{ session.name }}!</h2>
+                        <p>Kelola seluruh sistem BIMANTARA STAINLESS STEEL dari sini</p>
+                    </div>
+                </div>
+
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">
+                        <span>{% if category == 'success' %}✓{% else %}⚠{% endif %}</span>
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+                
+                <!-- Stats Grid -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#3498db" stroke-width="2">
+                                <path d="M9 17H7V10H9M13 17H11V7H13M17 17H15V13H17M5 21H19C20.1046 21 21 20.1046 21 19V5C21 3.89543 20.1046 3 19 3H5C3.89543 3 3 3.89543 3 5V19C3 20.1046 3.89543 21 5 21Z"/>
+                            </svg>
+                        </div>
+                        <div class="stat-content">
+                            <h3>Total Pesanan</h3>
+                            <div class="stat-number">{{ total_orders }}</div>
+                            <p class="stat-sub">Semua waktu</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#9b59b6" stroke-width="2">
+                                <path d="M12 12C14.2091 12 16 10.2091 16 8C16 5.79086 14.2091 4 12 4C9.79086 4 8 5.79086 8 8C8 10.2091 9.79086 12 12 12Z"/>
+                                <path d="M6 20C6 17.7909 7.79086 16 10 16H14C16.2091 16 18 17.7909 18 20"/>
+                            </svg>
+                        </div>
+                        <div class="stat-content">
+                            <h3>Total Pengguna</h3>
+                            <div class="stat-number">{{ total_users }}</div>
+                            <p class="stat-sub">Terdaftar</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card stat-revenue">
+                        <div class="stat-icon">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#2ecc71" stroke-width="2">
+                                <path d="M12 1V23M17 5H9.5C8.57174 5 7.6815 5.36875 7.02513 6.02513C6.36875 6.6815 6 7.57174 6 8.5C6 9.42826 6.36875 10.3185 7.02513 10.9749C7.6815 11.6313 8.57174 12 9.5 12H14.5C15.4283 12 16.3185 12.3687 16.9749 13.0251C17.6313 13.6815 18 14.5717 18 15.5C18 16.4283 17.6313 17.3185 16.9749 17.9749C16.3185 18.6313 15.4283 19 14.5 19H6"/>
+                            </svg>
+                        </div>
+                        <div class="stat-content">
+                            <h3>Total Pendapatan</h3>
+                            <div class="stat-number">Rp {{ "{:,.0f}".format(total_revenue) }}</div>
+                            <p class="stat-sub">Keseluruhan</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Sales Chart Section -->
+                <div class="chart-section">
+                    <div class="chart-header">
+                        <h3>Grafik Penjualan 12 Bulan Terakhir</h3>
+                    </div>
+                    <div class="chart-container-wrapper">
+                        <canvas id="salesChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Recent Orders -->
+                <div class="dashboard-content">
+                    <div class="section-header">
+                        <h3>Pesanan Terbaru</h3>
+                        <a href="#section-orders" class="view-all">Lihat Semua →</a>
+                    </div>
+                    <div class="table-container">
+                        <table class="order-table">
+                            <thead>
+                                <tr>
+                                    <th>No. Pesanan</th>
+                                    <th>Produk</th>
+                                    <th>Pelanggan</th>
+                                    <th>Total</th>
+                                    <th>Status</th>
+                                    <th>Tanggal</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for order in recent_orders %}
+                                <tr>
+                                    <td><strong>{{ order.kd_order }}</strong></td>
+                                    <td>{{ order.product_name }}</td>
+                                    <td>{{ order.customer_name }}</td>
+                                    <td>Rp {{ order.total_price_fixed|currency }}</td>
+                                    <td>
+                                        <span class="status-badge status-{{ order.status|lower }}">
+                                            {{ order.status|title }}
+                                        </span>
+                                    </td>
+                                    <td>{{ order.formatted_date }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Laporan Penjualan Section -->
+            <section id="section-laporan" class="management-section">
+                <!-- Header -->
+                <div class="page-header">
+                    <h1 class="page-title">Laporan Penjualan</h1>
+                    <p class="page-subtitle">Kelola dan download laporan penjualan berdasarkan periode</p>
+                </div>
+
+                <!-- Filter Section -->
+                <div class="filter-section">
+                    <form method="GET" action="{{ url_for('dashboard') }}#section-laporan" class="filter-form">
+                        <div class="form-group">
+                            <label for="start_month">Bulan Mulai</label>
+                            <select name="start_month" id="start_month" required>
+                                {% for m in range(1, 13) %}
+                                <option value="{{ m }}" {% if m == selected_start_month %}selected{% endif %}>
+                                    {{ bulan_id[m] }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="end_month">Bulan Akhir</label>
+                            <select name="end_month" id="end_month" required>
+                                {% for m in range(1, 13) %}
+                                <option value="{{ m }}" {% if m == selected_end_month %}selected{% endif %}>
+                                    {{ bulan_id[m] }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="year">Pilih Tahun</label>
+                            <select name="year" id="year" required>
+                                {% for y in available_years %}
+                                <option value="{{ y }}" {% if y == selected_year %}selected{% endif %}>
+                                    {{ y }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <button type="submit" class="btn-filter">
+                            <i class="fas fa-filter"></i> Filter Data
+                        </button>
+
+                        <a href="{{ url_for('download_laporan_pdf', start_month=selected_start_month, end_month=selected_end_month, year=selected_year) }}"
+                           class="btn-download">
+                            <i class="fas fa-file-pdf"></i> Download PDF
+                        </a>
+                    </form>
+                </div>
+
+                <!-- Laporan Stats -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#3498db" stroke-width="2">
+                                <path d="M9 5H7C5.89543 5 5 5.89543 5 7V19C5 20.1046 5.89543 21 7 21H17C18.1046 21 19 20.1046 19 19V7C19 5.89543 18.1046 5 17 5H15M9 5C9 6.10457 9.89543 7 11 7H13C14.1046 7 15 6.10457 15 5M9 5C9 3.89543 9.89543 3 11 3H13C14.1046 3 15 3.89543 15 5M12 12H15M12 16H15M9 12H9.01M9 16H9.01"/>
+                            </svg>
+                        </div>
+                        <div class="stat-content">
+                            <h3>Total Pesanan</h3>
+                            <div class="stat-number">{{ total_orders_laporan }}</div>
+                            <p class="stat-sub">
+                                {% if selected_start_month == selected_end_month %}
+                                    {{ bulan_id[selected_start_month] }} {{ selected_year }}
+                                {% else %}
+                                    {{ bulan_id[selected_start_month] }} - {{ bulan_id[selected_end_month] }} {{ selected_year }}
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="stat-card stat-revenue">
+                        <div class="stat-icon">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#2ecc71" stroke-width="2">
+                                <path d="M12 1V23M17 5H9.5C8.57174 5 7.6815 5.36875 7.02513 6.02513C6.36875 6.6815 6 7.57174 6 8.5C6 9.42826 6.36875 10.3185 7.02513 10.9749C7.6815 11.6313 8.57174 12 9.5 12H14.5C15.4283 12 16.3185 12.3687 16.9749 13.0251C17.6313 13.6815 18 14.5717 18 15.5C18 16.4283 17.6313 17.3185 16.9749 17.9749C16.3185 18.6313 15.4283 19 14.5 19H6"/>
+                            </svg>
+                        </div>
+                        <div class="stat-content">
+                            <h3>Total Pendapatan</h3>
+                            <div class="stat-number">Rp {{ "{:,.0f}".format(total_revenue_laporan) }}</div>
+                            <p class="stat-sub">
+                                {% if selected_start_month == selected_end_month %}
+                                    {{ bulan_id[selected_start_month] }} {{ selected_year }}
+                                {% else %}
+                                    {{ bulan_id[selected_start_month] }} - {{ bulan_id[selected_end_month] }} {{ selected_year }}
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Status Stats -->
+                <div class="status-stats">
+                    <h3>Statistik Status Pesanan</h3>
+                    <div class="status-grid">
+                        {% for stat in status_stats_laporan %}
+                        <div class="status-card status-{{ stat.status|lower }}">
+                            <div class="status-header">
+                                <span class="status-badge">{{ stat.status|title }}</span>
+                                <span class="status-count">{{ stat.count }}</span>
+                            </div>
+                            <div class="status-revenue">Rp {{ "{:,.0f}".format(stat.revenue) }}</div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Laporan Table -->
+                <div class="table-container">
+                    <table class="order-table">
+                        <thead>
+                            <tr>
+                                <th>Kode Order</th>
+                                <th>Produk</th>
+                                <th>Pelanggan</th>
+                                <th>Total</th>
+                                <th>Status</th>
+                                <th>Tanggal</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for order in orders %}
+                            <tr>
+                                <td><strong>{{ order.kd_order }}</strong></td>
+                                <td>{{ order.product_name }}</td>
+                                <td>{{ order.customer_name }}</td>
+                                <td>Rp {{ order.total_price|currency }}</td>
+                                <td>
+                                    <span class="status-badge status-{{ order.status|lower }}">
+                                        {{ order.status|title }}
+                                    </span>
+                                </td>
+                                <td>{{ order.formatted_date }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {% if not orders %}
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📊</div>
+                        <h3 class="empty-state-title">Tidak Ada Data</h3>
+                        <p>Tidak ada pesanan untuk periode {{ bulan_id[selected_month] }} {{ selected_year }}</p>
+                    </div>
+                    {% endif %}
+                </div>
+
+            </section>
+
+            <!-- Users Management Section -->
+            <section id="section-users" class="management-section hidden">
+                <!-- Header -->
+                <div class="page-header">
+                    <h1 class="page-title">Daftar Pengguna</h1>
+                    <p class="page-subtitle">Data pengguna terdaftar</p>
+                </div>
+
+                <!-- Users Table Container -->
+                <div class="user-table-container">
+                    <table class="user-table">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Nama</th>
+                                <th>Email</th>
+                                <th>Telepon</th>
+                                <th>Role</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for user in all_users %}
+                            <tr>
+                                <td>{{ loop.index }}</td>
+                                <td>{{ user.name }}</td>
+                                <td>{{ user.email }}</td>
+                                <td>{{ user.phone }}</td>
+                                <td>
+                                    <form method="POST" action="{{ url_for('update_user_role', user_id=user.id) }}" style="display: inline;">
+                                        <select name="role" class="role-select">
+                                            <option value="pembeli" {% if user.role == 'pembeli' %}selected{% endif %}>Pembeli</option>
+                                            <option value="admin" {% if user.role == 'admin' %}selected{% endif %}>Admin</option>
+                                        </select>
+                                        <button type="submit" class="btn-update">Update</button>
+                                    </form>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Products Management Section  -->
+            <section id="section-products" class="products-section hidden">
+                <!-- Header -->
+                <div class="page-header">
+                    <h1 class="page-title">Kelola Produk</h1>
+                    <p class="page-subtitle">Manajemen produk dandang kukus</p>
+                </div>
+
+                <!-- Action Bar -->
+                <div class="action-bar">
+                    <div class="search-box">
+                        <input type="text" id="searchInput" placeholder="🔍 Cari produk..." onkeyup="searchProducts()">
+                    </div>
+                    <button class="btn btn-primary" onclick="openAddModal()">
+                        <i class="fas fa-plus"></i> Tambah Produk
+                    </button>
+                </div>
+
+                <!-- Products Table -->
+                <div class="products-table">
+                    {% if products and products|length > 0 %}
+                    <table id="productsTable">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nama Produk</th>
+                                <th>Slug</th>
+                                <th>Harga</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for product in products %}
+                            <tr>
+                                <td>{{ product.id }}</td>
+                                <td class="product-name">{{ product.name }}</td>
+                                <td>{{ product.slug }}</td>
+                                <td class="product-price">Rp {{ "{:,.0f}".format(product.price) }}</td>
+                                <td class="actions">
+                                    <button class="btn btn-warning" 
+                                            data-id="{{ product.id }}"
+                                            data-name="{{ product.name }}"
+                                            data-slug="{{ product.slug }}"
+                                            data-price="{{ product.price }}"
+                                            onclick="openEditModal(this)">
+                                        <i class="fas fa-edit"></i> Edit
+                                    </button>
+                                    <button class="btn btn-danger" 
+                                            data-id="{{ product.id }}"
+                                            data-name="{{ product.name }}"
+                                            onclick="confirmDelete(this)">
+                                        <i class="fas fa-trash"></i> Hapus
+                                    </button>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {% else %}
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📦</div>
+                        <h3 class="empty-state-title">Belum Ada Produk</h3>
+                        <p>Mulai tambahkan produk pertama Anda</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </section>
+
+            <!-- Orders Management Section -->
+            <section id="section-orders" class="management-section hidden">
+                <!-- Header -->
+                <div class="page-header">
+                    <h1 class="page-title">Kelola Pesanan</h1>
+                    <p class="page-subtitle">Manajemen pesanan pelanggan</p>
+                </div>
+
+                <!-- Orders Table Container -->
+                <div class="user-table-container">
+                    <table class="user-table">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Kode Pesanan</th>
+                                <th>Produk</th>
+                                <th>Pelanggan</th>
+                                <th>Total</th>
+                                <th>Status</th>
+                                <th>Tanggal</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for order in all_orders %}
+                            <tr>
+                                <td>{{ loop.index }}</td>
+                                <td><strong>{{ order.kd_order }}</strong></td>
+                                <td>{{ order.product_name }}</td>
+                                <td>{{ order.customer_name }}</td>
+                                <td>Rp {{ "{:,.0f}".format(order.total_price) }}</td>
+                                <td>
+                                    <form method="POST" action="{{ url_for('update_order_status', order_id=order.id) }}" style="display: inline;">
+                                        <select name="status" class="role-select">
+                                            <option value="pending" {% if order.status == 'pending' %}selected{% endif %}>Pending</option>
+                                            <option value="processing" {% if order.status == 'processing' %}selected{% endif %}>Processing</option>
+                                            <option value="completed" {% if order.status == 'completed' %}selected{% endif %}>Completed</option>
+                                            <option value="cancelled" {% if order.status == 'cancelled' %}selected{% endif %}>Cancelled</option>
+                                        </select>
+                                        <button type="submit" class="btn-update">Update</button>
+                                    </form>
+                                </td>
+                                <td>{{ order.created_at.strftime('%d/%m/%Y %H:%M') if order.created_at else 'N/A' }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Add Product Modal -->
+    <div id="addModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Tambah Produk Baru</h2>
+                <button type="button" class="modal-close" onclick="closeAddModal()">&times;</button>
+            </div>
+            <form action="{{ url_for('add_product') }}" method="POST">
+                <div class="form-group">
+                    <label for="add_name">Nama Produk *</label>
+                    <input type="text" id="add_name" name="name" required placeholder="Contoh: Dandang 12kg">
+                </div>
+                <div class="form-group">
+                    <label for="add_slug">Slug *</label>
+                    <input type="text" id="add_slug" name="slug" required placeholder="Contoh: dandang-12kg">
+                    <small style="color: var(--text-light); font-size: 0.85rem;">Gunakan huruf kecil dan tanda hubung (-)</small>
+                </div>
+                <div class="form-group">
+                    <label for="add_price">Harga (Rp) *</label>
+                    <input type="number" id="add_price" name="price" required placeholder="Contoh: 600000" step="1000" min="0">
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeAddModal()">Batal</button>
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Simpan Produk</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit Product Modal -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Edit Produk</h2>
+                <button type="button" class="modal-close" onclick="closeEditModal()">&times;</button>
+            </div>
+            <form id="editForm" method="POST">
+                <input type="hidden" id="edit_id" name="id">
+                <div class="form-group">
+                    <label for="edit_name">Nama Produk *</label>
+                    <input type="text" id="edit_name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="edit_slug">Slug *</label>
+                    <input type="text" id="edit_slug" name="slug" required>
+                    <small style="color: var(--text-light); font-size: 0.85rem;">Gunakan huruf kecil dan tanda hubung (-)</small>
+                </div>
+                <div class="form-group">
+                    <label for="edit_price">Harga (Rp) *</label>
+                    <input type="number" id="edit_price" name="price" required step="1000" min="0">
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeEditModal()">Batal</button>
+                    <button type="submit" class="btn btn-success"><i class="fas fa-save"></i> Update Produk</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="deleteModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Konfirmasi Hapus</h2>
+                <button type="button" class="modal-close" onclick="closeDeleteModal()">&times;</button>
+            </div>
+            <p style="margin-bottom: 1.5rem; color: var(--text-dark);">
+                Apakah Anda yakin ingin menghapus produk <strong id="deleteProductName"></strong>?
+            </p>
+            <p style="margin-bottom: 2rem; color: var(--danger-color); font-weight: 600;">
+                ⚠️ Tindakan ini tidak dapat dibatalkan!
+            </p>
+            <div class="form-actions">
+                <button type="button" class="btn btn-secondary" onclick="closeDeleteModal()">Batal</button>
+                <a id="deleteConfirmBtn" href="#section-products" class="btn btn-danger"><i class="fas fa-trash"></i> Ya, Hapus</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation and Modal Scripts -->
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+    console.log('Script loaded');
+
+    // Tab Navigation Management
+    const links = document.querySelectorAll('.sidebar-menu a[href^="#"]');
+    const sections = {
+        '#section-dashboard': document.getElementById('section-dashboard'),
+        '#section-products': document.getElementById('section-products'),
+        '#section-orders': document.getElementById('section-orders'),
+        '#section-users': document.getElementById('section-users'),
+        '#section-laporan': document.getElementById('section-laporan')
+    };
+
+    console.log('Sections found:', sections);
+
+    // Fungsi untuk set active section
+    function setActiveSection(hash) {
+        console.log('Setting active section:', hash);
+
+        // Update active menu
+        links.forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('href') === hash) {
+                link.classList.add('active');
+            }
+        });
+
+        // Hide all sections - pastikan semua section ter-hide
+        Object.keys(sections).forEach(key => {
+            const section = sections[key];
+            if (section) {
+                section.classList.add('hidden');
+                console.log('Hiding section:', key);
+            }
+        });
+
+        // Show active section
+        const activeSection = sections[hash];
+        if (activeSection) {
+            activeSection.classList.remove('hidden');
+            console.log('Showing section:', hash);
+        } else {
+            // Default to dashboard if section not found
+            console.log('Section not found, showing dashboard');
+            const dashboardSection = sections['#section-dashboard'];
+            if (dashboardSection) {
+                dashboardSection.classList.remove('hidden');
+            }
+            const dashboardLink = document.getElementById('link-dashboard');
+            if (dashboardLink) {
+                dashboardLink.classList.add('active');
+            }
+        }
+    }
+
+    // Handle menu clicks
+    links.forEach(link => {
+        link.addEventListener('click', function(e) {
+            const href = this.getAttribute('href');
+            if (href && href.startsWith('#')) {
+                e.preventDefault();
+                console.log('Link clicked:', href);
+                history.pushState(null, null, href);
+                setActiveSection(href);
+            }
+        });
+    });
+
+    // Handle initial load
+    const initialHash = window.location.hash || '#section-dashboard';
+    console.log('Initial hash:', initialHash);
+    setActiveSection(initialHash);
+
+    // Handle browser back/forward
+    window.addEventListener('hashchange', function() {
+        const hash = window.location.hash || '#section-dashboard';
+        console.log('Hash changed to:', hash);
+        setActiveSection(hash);
+    });
+
+    // Update tanggal
+    const now = new Date();
+    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    const dateElement = document.getElementById('current-date');
+    if (dateElement) {
+        dateElement.textContent = now.toLocaleDateString('id-ID', options);
+    }
+});
+
+// Modal Functions (dipindahkan ke luar DOMContentLoaded agar bisa dipanggil dari inline onclick)
+function openAddModal() {
+    const modal = document.getElementById('addModal');
+    if (modal) {
+        modal.classList.add('active');
+    }
+}
+
+function closeAddModal() {
+    const modal = document.getElementById('addModal');
+    if (modal) {
+        modal.classList.remove('active');
+        // Reset form
+        const form = modal.querySelector('form');
+        if (form) form.reset();
+    }
+}
+
+function openEditModal(button) {
+    var id = button.getAttribute('data-id');
+    var name = button.getAttribute('data-name');
+    var slug = button.getAttribute('data-slug');
+    var price = button.getAttribute('data-price');
+
+    document.getElementById('edit_id').value = id;
+    document.getElementById('edit_name').value = name;
+    document.getElementById('edit_slug').value = slug;
+    document.getElementById('edit_price').value = price;
+
+    document.getElementById('editForm').action = '/admin/products/edit/' + id;
+    document.getElementById('editModal').classList.add('active');
+}
+
+function closeEditModal() {
+    const modal = document.getElementById('editModal');
+    if (modal) {
+        modal.classList.remove('active');
+    }
+}
+
+function confirmDelete(button) {
+    var id = button.getAttribute('data-id');
+    var name = button.getAttribute('data-name');
+
+    document.getElementById('deleteProductName').textContent = name;
+    document.getElementById('deleteConfirmBtn').href = '/admin/products/delete/' + id;
+    document.getElementById('deleteModal').classList.add('active');
+}
+
+function closeDeleteModal() {
+    const modal = document.getElementById('deleteModal');
+    if (modal) {
+        modal.classList.remove('active');
+    }
+}
+
+// Search Products
+function searchProducts() {
+    var input = document.getElementById('searchInput');
+    var filter = input.value.toUpperCase();
+    var table = document.getElementById('productsTable');
+
+    if (!table) return;
+
+    var tr = table.getElementsByTagName('tr');
+
+    for (var i = 1; i < tr.length; i++) {
+        var tdName = tr[i].getElementsByTagName('td')[1];
+        var tdSlug = tr[i].getElementsByTagName('td')[2];
+
+        if (tdName || tdSlug) {
+            var txtName = tdName.textContent || tdName.innerText;
+            var txtSlug = tdSlug.textContent || tdSlug.innerText;
+
+            if (txtName.toUpperCase().indexOf(filter) > -1 || txtSlug.toUpperCase().indexOf(filter) > -1) {
+                tr[i].style.display = '';
+            } else {
+                tr[i].style.display = 'none';
+            }
+        }
+    }
+}
+
+// Auto-generate slug from name
+document.addEventListener('DOMContentLoaded', function() {
+    const addNameInput = document.getElementById('add_name');
+    if (addNameInput) {
+        addNameInput.addEventListener('input', function(e) {
+            var slug = e.target.value
+                .toLowerCase()
+                .replace(/[^a-z0-9\s-]/g, '')
+                .replace(/\s+/g, '-')
+                .replace(/-+/g, '-')
+                .trim();
+            const slugInput = document.getElementById('add_slug');
+            if (slugInput) {
+                slugInput.value = slug;
+            }
+        });
+    }
+
+    // Close modal with ESC key
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape') {
+            closeAddModal();
+            closeEditModal();
+            closeDeleteModal();
+        }
+    });
+
+    // Close modal when clicking outside
+    window.onclick = function(event) {
+        var modals = ['addModal', 'editModal', 'deleteModal'];
+        modals.forEach(modalId => {
+            var modal = document.getElementById(modalId);
+            if (modal && event.target === modal) {
+                if (modalId === 'addModal') closeAddModal();
+                if (modalId === 'editModal') closeEditModal();
+                if (modalId === 'deleteModal') closeDeleteModal();
+            }
+        });
+    };
+});
+    </script>
+
+    <!-- Chart.js Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+    
+    <!-- Sales Chart Data -->
+    <script type="application/json" id="chart-data">
+        {
+            "months": {{ chart_months|tojson|safe }},
+            "orders": {{ chart_orders|tojson|safe }},
+            "revenue": {{ chart_revenue|tojson|safe }}
+        }
+    </script>
+
+    <!-- Sales Chart Script -->
+    <script>
+        // Data dari Flask
+        const chartData = JSON.parse(document.getElementById('chart-data').textContent);
+        const chartMonths = chartData.months;
+        const chartOrders = chartData.orders;
+        const chartRevenue = chartData.revenue;
+
+        // Konfigurasi Chart
+        const ctx = document.getElementById('salesChart');
+
+        const salesChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: chartMonths,
+                datasets: [
+                    {
+                        label: 'Jumlah Pesanan',
+                        data: chartOrders,
+                        backgroundColor: 'rgba(0, 179, 179, 0.7)',
+                        borderColor: 'rgba(0, 179, 179, 1)',
+                        borderWidth: 2,
+                        yAxisID: 'y',
+                        order: 2
+                    },
+                    {
+                        label: 'Pendapatan (Rp)',
+                        data: chartRevenue,
+                        backgroundColor: 'rgba(0, 102, 102, 0.1)',
+                        borderColor: 'rgba(0, 102, 102, 1)',
+                        borderWidth: 3,
+                        type: 'line',
+                        tension: 0.4,
+                        yAxisID: 'y1',
+                        order: 1,
+                        fill: true
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: {
+                    mode: 'index',
+                    intersect: false,
+                },
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: {
+                            font: {
+                                size: 14,
+                                family: 'Poppins',
+                                weight: '500'
+                            },
+                            padding: 20,
+                            usePointStyle: true,
+                            pointStyle: 'circle'
+                        }
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                        padding: 12,
+                        titleFont: {
+                            size: 14,
+                            family: 'Poppins',
+                            weight: '600'
+                        },
+                        bodyFont: {
+                            size: 13,
+                            family: 'Poppins'
+                        },
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.dataset.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                if (context.dataset.yAxisID === 'y1') {
+                                    label += 'Rp ' + context.parsed.y.toLocaleString('id-ID');
+                                } else {
+                                    label += context.parsed.y + ' pesanan';
+                                }
+                                return label;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: {
+                            display: false
+                        },
+                        ticks: {
+                            font: {
+                                size: 12,
+                                family: 'Poppins'
+                            }
+                        }
+                    },
+                    y: {
+                        type: 'linear',
+                        display: true,
+                        position: 'left',
+                        title: {
+                            display: true,
+                            text: 'Jumlah Pesanan',
+                            font: {
+                                size: 13,
+                                family: 'Poppins',
+                                weight: '600'
+                            },
+                            color: 'rgba(0, 179, 179, 1)'
+                        },
+                        grid: {
+                            color: 'rgba(0, 102, 102, 0.08)'
+                        },
+                        ticks: {
+                            font: {
+                                size: 12,
+                                family: 'Poppins'
+                            }
+                        }
+                    },
+                    y1: {
+                        type: 'linear',
+                        display: true,
+                        position: 'right',
+                        title: {
+                            display: true,
+                            text: 'Pendapatan (Rp)',
+                            font: {
+                                size: 13,
+                                family: 'Poppins',
+                                weight: '600'
+                            },
+                            color: 'rgba(0, 102, 102, 1)'
+                        },
+                        grid: {
+                            drawOnChartArea: false,
+                        },
+                        ticks: {
+                            font: {
+                                size: 12,
+                                family: 'Poppins'
+                            },
+                            callback: function(value) {
+                                return 'Rp ' + value.toLocaleString('id-ID');
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+
+</body>
+</html>

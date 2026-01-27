@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Checkout - Bimantara Stainless Steel</title>
+    <link
+      rel="stylesheet"
+      href="{{url_for('static', filename='styles/checkout.css')}}"
+    />
+  </head>
+  <body>
+    <!-- Navigation Bar -->
+    <nav class="nav-bar">
+      <img
+        id="logo"
+        src="{{url_for('static', filename='images/logo.png')}}"
+        alt="Bimantara Logo"
+      />
+      <div class="nav-actions">
+        <a href="{{url_for('product')}}">Shop</a>
+      </div>
+    </nav>
+
+    <main class="checkout-main">
+      <!-- Progress Steps -->
+      <div class="progress-steps">
+        <div class="step active">
+          <div class="step-circle">1</div>
+          <span class="step-label">Data Pesanan</span>
+        </div>
+        <div class="step-line"></div>
+        <div class="step">
+          <div class="step-circle">2</div>
+          <span class="step-label">Pembayaran</span>
+        </div>
+        <div class="step-line"></div>
+        <div class="step">
+          <div class="step-circle">3</div>
+          <span class="step-label">Selesai</span>
+        </div>
+      </div>
+
+      <!-- Checkout Form Container -->
+      <div class="checkout-container">
+        <div class="checkout-header">
+          <h1 class="checkout-title">{% if cart_items %}Checkout Keranjang{% else %}Buat Pesanan{% endif %}</h1>
+          <p class="checkout-subtitle">{% if cart_items %}Lengkapi data pemesanan untuk semua produk di keranjang{% else %}Lengkapi data pemesanan Anda dengan benar{% endif %}</p>
+        </div>
+
+        <form class="checkout-form" action="{% if cart_items %}{{url_for('place_cart_order')}}{% else %}{{url_for('place_order')}}{% endif %}" method="post">
+          {% if not cart_items %}<input type="hidden" name="slug" value="{{ product['slug'] }}">{% endif %}
+          
+          <!-- Customer Information Section -->
+          <div class="form-section">
+            <h3 class="section-title">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+              </svg>
+              Informasi Pembeli
+            </h3>
+            
+            <div class="form-group">
+              <label for="customer_name" class="form-label">Nama Lengkap</label>
+              <input 
+                type="text" 
+                id="customer_name"
+                name="customer_name" 
+                class="form-input"
+                placeholder="Masukkan nama lengkap Anda"
+                value="{{ session.name if session.name else '' }}"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="contact" class="form-label">Nomor Kontak</label>
+              <input 
+                type="text" 
+                id="contact"
+                name="contact" 
+                class="form-input"
+                placeholder="Contoh: 08123456789"
+                value="{{ session.phone if session.phone else '' }}"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="address" class="form-label">Alamat Lengkap</label>
+              <textarea 
+                id="address"
+                name="address"
+                class="form-textarea"
+                rows="4"
+                placeholder="Masukkan alamat lengkap untuk pengiriman"
+                required
+              >{{ session.address if session.address else '' }}</textarea>
+            </div>
+          </div>
+
+          <!-- Product Information Section -->
+          {% if cart_items %}
+          <div class="form-section">
+            <h3 class="section-title">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="9" cy="21" r="1"></circle>
+                <circle cx="20" cy="21" r="1"></circle>
+                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+              </svg>
+              Produk di Keranjang
+            </h3>
+
+            <div class="cart-items">
+              {% for item in cart_items %}
+              <div class="cart-item">
+                <div class="item-info">
+                  <h4>{{ item.name }}</h4>
+                  <p>Jumlah: {{ item.quantity }}</p>
+                  <p>Harga: Rp {{ '{:,.0f}'.format(item.price) }}</p>
+                </div>
+                <div class="item-total">
+                  Rp {{ '{:,.0f}'.format(item.line_total) }}
+                </div>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+          {% else %}
+          <div class="form-section">
+            <h3 class="section-title">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <path d="M16 10a4 4 0 0 1-8 0"></path>
+              </svg>
+              Detail Produk
+            </h3>
+
+            <div class="form-group">
+              <label for="product_name" class="form-label">Nama Produk</label>
+              <input
+                type="text"
+                id="product_name"
+                readonly
+                name="product_name"
+                value="{{product['name']}}"
+                class="form-input form-input-readonly"
+              />
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="quantity" class="form-label">Jumlah</label>
+                <div class="quantity-control">
+                  <button type="button" class="quantity-btn" onclick="decreaseQuantity()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                  </button>
+                  <input
+                    type="number"
+                    id="quantity"
+                    name="quantity"
+                    class="quantity-input"
+                    value="1"
+                    min="1"
+                    oninput="hitungTotal()"
+                    required
+                  />
+                  <button type="button" class="quantity-btn" onclick="increaseQuantity()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="12" y1="5" x2="12" y2="19"></line>
+                      <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="price_display" class="form-label">Harga Satuan</label>
+                <input
+                  type="text"
+                  id="price_display"
+                  readonly
+                  value="Rp {{ '{:,.0f}'.format(product['price']) }}"
+                  class="form-input form-input-readonly"
+                />
+                <!-- Hidden input untuk dikirim ke backend -->
+                <input type="hidden" name="price" value="{{product['price']}}">
+                <input type="hidden" id="price_value" value="{{product['price']}}">
+              </div>
+            </div>
+          </div>
+          {% endif %}
+
+          <!-- Order Summary -->
+          <div class="order-summary">
+            <h3 class="summary-title">Ringkasan Pesanan</h3>
+            {% if cart_items %}
+            <div class="summary-row">
+              <span class="summary-label">Subtotal:</span>
+              <span class="summary-value">Rp {{ '{:,.0f}'.format(total_price) }}</span>
+            </div>
+            {% else %}
+            <div class="summary-row">
+              <span class="summary-label">Subtotal:</span>
+              <span class="summary-value" id="subtotal">Rp 0</span>
+            </div>
+            {% endif %}
+            <div class="summary-row">
+              <span class="summary-label">Ongkos Kirim:</span>
+              <span class="summary-value">Rp 10,000</span>
+            </div>
+            <div class="summary-divider"></div>
+            <div class="summary-row summary-total">
+              <span class="summary-label">Total:</span>
+              {% if cart_items %}
+              <span class="summary-value">Rp {{ '{:,.0f}'.format(total_price + 10000) }}</span>
+              {% else %}
+              <span class="summary-value" id="total">Rp 0</span>
+              {% endif %}
+            </div>
+          </div>
+
+          <!-- Submit Button -->
+          <button type="submit" class="submit-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="9" cy="21" r="1"></circle>
+              <circle cx="20" cy="21" r="1"></circle>
+              <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+            </svg>
+            <span>Buat Pesanan</span>
+          </button>
+        </form>
+
+        <!-- Trust Badges -->
+        <div class="trust-badges">
+          <div class="trust-badge">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            </svg>
+            <span>Pembayaran Aman</span>
+          </div>
+          <div class="trust-badge">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="1" y="3" width="15" height="13"></rect>
+              <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
+              <circle cx="5.5" cy="18.5" r="2.5"></circle>
+              <circle cx="18.5" cy="18.5" r="2.5"></circle>
+            </svg>
+            <span>Pengiriman Cepat</span>
+          </div>
+          <div class="trust-badge">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+              <polyline points="22 4 12 14.01 9 11.01"></polyline>
+            </svg>
+            <span>Garansi Kualitas</span>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-brand">
+            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo BIMANTARA" class="footer-logo">
+            <h3>BIMANTARA STAINLESS STEEL</h3>
+            <p>Produsen dandang kukus berkualitas tinggi</p>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+        function hitungTotal() {
+    let quantity = document.getElementById("quantity").value;
+    let harga = document.getElementById("price_value").value;
+    let subtotal = quantity * harga;
+    let ongkir = 10000;
+    let total = subtotal + ongkir;
+
+    let formattedSubtotal = new Intl.NumberFormat("id-ID", {
+      style: "currency",
+      currency: "IDR",
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0
+    }).format(subtotal);
+
+    let formattedTotal = new Intl.NumberFormat("id-ID", {
+      style: "currency",
+      currency: "IDR",
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0
+    }).format(total);
+
+    document.getElementById("subtotal").innerHTML = formattedSubtotal;
+    document.getElementById("total").innerHTML = formattedTotal;
+  }
+
+      function increaseQuantity() {
+        let quantityInput = document.getElementById("quantity");
+        quantityInput.value = parseInt(quantityInput.value) + 1;
+        hitungTotal();
+      }
+
+      function decreaseQuantity() {
+        let quantityInput = document.getElementById("quantity");
+        if (parseInt(quantityInput.value) > 1) {
+          quantityInput.value = parseInt(quantityInput.value) - 1;
+          hitungTotal();
+        }
+      }
+
+      // Initialize total on page load
+      window.onload = function() {
+        hitungTotal();
+      };
+    </script>
+  </body>
+</html>

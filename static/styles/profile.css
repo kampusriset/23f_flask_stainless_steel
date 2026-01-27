@@ -1,0 +1,857 @@
+/* ==================== VARIABLES ==================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --primary-color: #006666;
+    --secondary-color: #008080;
+    --accent-color: #00b3b3;
+    --text-dark: #1a2a2a;
+    --text-light: #5A6C7D;
+    --bg-light: #fafdfc;
+    --bg-white: #ffffff;
+    --shadow-sm: 0 2px 8px rgba(0, 102, 102, 0.08);
+    --shadow-md: 0 8px 24px rgba(0, 102, 102, 0.12);
+    --shadow-lg: 0 16px 48px rgba(0, 102, 102, 0.16);
+    --transition-smooth: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ==================== BASE STYLES ==================== */
+body {
+    font-family: 'Poppins', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg-light);
+    color: var(--text-dark);
+    line-height: 1.7;
+    font-weight: 300;
+    display: flex;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* ==================== SIDEBAR ==================== */
+.profile-sidebar {
+    width: 320px;
+    background: white;
+    box-shadow: var(--shadow-md);
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    overflow-y: auto;
+    z-index: 100;
+}
+
+.sidebar-header {
+    padding: 3rem 2rem 2rem;
+    text-align: center;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    border-bottom: 4px solid var(--accent-color);
+}
+
+.profile-avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5rem;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+.profile-avatar i {
+    font-size: 3rem;
+    color: white;
+}
+
+.profile-name {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: white;
+}
+
+.sidebar-email {
+    font-size: 0.95rem;
+    color: rgba(255, 255, 255, 0.85);
+    font-weight: 300;
+}
+
+.profile-menu {
+    padding: 1.5rem 0;
+    flex: 1;
+}
+
+.menu-section {
+    margin-bottom: 2rem;
+}
+
+.menu-section-title {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-light);
+    padding: 0 2rem;
+    margin-bottom: 0.75rem;
+}
+
+.menu-link {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 2rem;
+    text-decoration: none;
+    color: var(--text-dark);
+    font-weight: 500;
+    font-size: 1rem;
+    transition: var(--transition-smooth);
+    position: relative;
+}
+
+.menu-link i {
+    font-size: 1.3rem;
+    color: var(--secondary-color);
+    width: 28px;
+    min-width: 28px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+}
+
+.menu-link:hover {
+    background: linear-gradient(90deg, rgba(0, 102, 102, 0.05), transparent);
+    color: var(--primary-color);
+    padding-left: 2.5rem;
+}
+
+.menu-link.active {
+    background: linear-gradient(90deg, rgba(0, 102, 102, 0.1), transparent);
+    color: var(--primary-color);
+    border-left: 4px solid var(--secondary-color);
+    font-weight: 600;
+}
+
+.menu-link.active i {
+    color: var(--primary-color);
+}
+
+.menu-link.logout-link:hover {
+    background: linear-gradient(90deg, rgba(220, 53, 69, 0.05), transparent);
+    color: #dc3545;
+}
+
+.menu-link.logout-link:hover i {
+    color: #dc3545;
+}
+
+.cart-badge {
+    margin-left: auto;
+    background: var(--accent-color);
+    color: white;
+    padding: 0.2rem 0.6rem;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    min-width: 24px;
+    text-align: center;
+}
+
+/* ==================== MAIN CONTENT ==================== */
+.profile-main {
+    margin-left: 320px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.nav-bar {
+    background: white;
+    padding: 1.5rem 3rem;
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(0, 102, 102, 0.08);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+}
+
+.nav-bar h1 {
+    font-size: 1.75rem;
+    color: var(--primary-color);
+    font-weight: 700;
+}
+
+.nav-user {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.nav-user-info {
+    text-align: right;
+}
+
+.nav-user-name {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+.nav-user-role {
+    font-size: 0.85rem;
+    color: var(--text-light);
+}
+
+.nav-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1.2rem;
+    box-shadow: 0 4px 12px rgba(0, 102, 102, 0.2);
+}
+
+/* ==================== PROFILE CONTAINER ==================== */
+.profile-container {
+    padding: 2.5rem 3rem;
+    flex: 1;
+}
+
+
+
+/* ==================== PROFILE CONTENT ==================== */
+.profile-content {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.profile-card,
+.orders-section,
+.cart-section {
+    background: white;
+    border-radius: 24px;
+    padding: 2.5rem;
+    box-shadow: var(--shadow-md);
+    border: 1px solid rgba(0, 102, 102, 0.06);
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 2px solid rgba(0, 102, 102, 0.1);
+}
+
+.section-header h2 {
+    font-size: 1.75rem;
+    color: var(--primary-color);
+    font-weight: 700;
+}
+
+/* ==================== PROFILE INFO GRID ==================== */
+.profile-info-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.info-item {
+    padding: 1.5rem;
+    background: var(--bg-light);
+    border-radius: 16px;
+    border: 1px solid rgba(0, 102, 102, 0.08);
+    transition: var(--transition-smooth);
+}
+
+.info-item:hover {
+    border-color: rgba(0, 102, 102, 0.15);
+    box-shadow: var(--shadow-sm);
+}
+
+.info-item.full {
+    grid-column: 1 / -1;
+}
+
+.info-label {
+    font-size: 0.9rem;
+    color: var(--text-light);
+    margin-bottom: 0.75rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.info-label i {
+    color: var(--secondary-color);
+}
+
+.info-value {
+    font-size: 1.1rem;
+    color: var(--text-dark);
+    font-weight: 500;
+}
+
+/* ==================== FORM STYLES ==================== */
+.profile-form {
+    animation: fadeIn 0.4s ease;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group.full {
+    grid-column: 1 / -1;
+}
+
+.form-label {
+    font-size: 0.95rem;
+    color: var(--text-dark);
+    margin-bottom: 0.75rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.form-label i {
+    color: var(--secondary-color);
+}
+
+.form-input {
+    padding: 1rem 1.25rem;
+    border: 2px solid rgba(0, 102, 102, 0.15);
+    border-radius: 12px;
+    font-size: 1rem;
+    font-family: 'Poppins', sans-serif;
+    transition: var(--transition-smooth);
+    background: white;
+    color: var(--text-dark);
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: var(--secondary-color);
+    box-shadow: 0 0 0 4px rgba(0, 128, 128, 0.1);
+}
+
+textarea.form-input {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.form-actions {
+    display: flex;
+    gap: 1rem;
+}
+
+/* ==================== BUTTONS ==================== */
+.btn {
+    padding: 1rem 2rem;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 1rem;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    transition: var(--transition-smooth);
+    border: none;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    box-shadow: 0 4px 16px rgba(0, 102, 102, 0.2);
+}
+
+.btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(0, 102, 102, 0.35);
+}
+
+.btn-outline {
+    background: white;
+    color: var(--primary-color);
+    border: 2px solid var(--primary-color);
+}
+
+.btn-outline:hover {
+    background: var(--primary-color);
+    color: white;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0, 102, 102, 0.25);
+}
+
+/* ==================== BUTTON ICONS ==================== */
+/* Ensure icons inside buttons are visible, correctly sized, and inherit button color. */
+.btn i,
+.btn .fa,
+.btn .fas,
+.btn .far,
+.btn .fal,
+.btn .fab {
+    color: inherit;
+    font-size: 1.05rem;
+    width: auto;
+    height: auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    vertical-align: middle;
+    margin-right: 0.6rem;
+    opacity: 1;
+    background: transparent;
+    border-radius: 0;
+    line-height: 1;
+}
+
+.btn-primary i,
+.btn-primary .fa,
+.btn-primary .fas {
+    color: white;
+}
+
+/* specific sizing for shopping/cart icons to ensure visual balance */
+.menu-link .fa-shopping-cart,
+.menu-link .fas.fa-shopping-cart,
+.menu-link .fa-shopping-bag,
+.menu-link .fas.fa-shopping-bag {
+    font-size: 1.45rem;
+}
+
+/* Ensure sidebar icons stay vertically centered relative to text */
+.menu-link {
+    align-items: center;
+}
+
+/* ==================== EMPTY-STATE CTA TWEAKS ==================== */
+
+/* Tombol di empty-state */
+.empty-state .btn {
+    padding: 0.9rem 2.4rem;
+    font-size: 1rem;
+    display: inline-flex;
+    align-items: center;      /* memastikan ikon + teks sejajar vertikal */
+    justify-content: center;
+    gap: 0.5rem;              /* memberi jarak stabil antara ikon & teks */
+}
+
+/* Reset semua ikon agar konsisten */
+.empty-state .btn i {
+    font-size: 1.1rem;        /* ukuran ikon */
+    line-height: 1;           /* biar nggak naik/turun */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    margin: 0;                /* hilangkan margin yang bikin geser */
+}
+
+/* Spesifik untuk ikon shopping-bag */
+.empty-state .btn .fa-shopping-bag {
+    transform: translateY(0); /* menghilangkan pergeseran */
+}
+
+/* ==================== ORDERS SECTION ==================== */
+.orders-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+/* ==================== CART SUMMARY ==================== */
+.cart-summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(0, 102, 102, 0.06);
+}
+
+.cart-summary p {
+    margin: 0;
+    font-size: 1rem;
+    color: var(--text-dark);
+    font-weight: 500;
+}
+
+.cart-summary p strong {
+    font-size: 1.05rem;
+    color: var(--primary-color);
+    margin-left: 0.5rem;
+}
+
+.cart-summary .btn {
+    padding: 0.65rem 1rem;
+    font-size: 0.95rem;
+}
+
+@media (max-width: 768px) {
+    .cart-summary {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .cart-summary .btn {
+        width: 100%;
+    }
+}
+
+.order-card {
+    background: var(--bg-light);
+    border-radius: 16px;
+    padding: 1.5rem 1.25rem;
+    border: 1px solid rgba(0, 102, 102, 0.08);
+    transition: var(--transition-smooth) , box-shadow 0.25s ease;
+}
+
+.order-card:hover {
+    transform: translateY(-6px);
+    border-color: rgba(0, 102, 102, 0.18);
+    box-shadow: var(--shadow-lg);
+}
+
+/* Make cart items stand out more (wider inner content, stronger accent) */
+.cart-section .order-card {
+    background: white;
+    padding: 1.25rem 1.5rem;
+    border-radius: 14px;
+    border: 1px solid rgba(0, 102, 102, 0.06);
+}
+
+.cart-section .order-header {
+    padding: 0.25rem 0.5rem;
+}
+
+.cart-section .order-product {
+    background: var(--bg-light);
+    padding: 1rem;
+    border-radius: 12px;
+}
+
+.cart-section .order-product-price {
+    color: var(--secondary-color);
+    font-size: 1.25rem;
+}
+
+.order-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(0, 102, 102, 0.1);
+}
+
+.order-id {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.1rem;
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+.order-id i {
+    color: var(--secondary-color);
+}
+
+.status-badge {
+    padding: 0.5rem 1.25rem;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    text-transform: capitalize;
+}
+
+.status-pending {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.status-processing {
+    background: #cfe2ff;
+    color: #084298;
+}
+
+.status-completed,
+.status-shipped {
+    background: #d1e7dd;
+    color: #0f5132;
+}
+
+.status-cancelled {
+    background: #f8d7da;
+    color: #842029;
+}
+
+.order-body {
+    margin-bottom: 1rem;
+}
+
+.order-product {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background: white;
+    border-radius: 12px;
+}
+
+.order-product-info h4 {
+    font-size: 1.2rem;
+    color: var(--primary-color);
+    margin-bottom: 0.25rem;
+    font-weight: 600;
+}
+
+.order-product-info p {
+    font-size: 1.1rem;
+    color: var(--text-dark);
+    font-weight: 500;
+}
+
+.order-product-price {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--secondary-color);
+}
+
+.order-footer {
+    padding-top: 1rem;
+    border-top: 1px solid rgba(0, 102, 102, 0.1);
+}
+
+.order-date {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.1rem;
+    color: var(--text-dark);
+    font-weight: 500;
+}
+
+.order-date i {
+    color: var(--secondary-color);
+}
+
+.order-qty {
+    font-size: 1.1rem;
+    color: var(--text-dark);
+    font-weight: 500;
+}
+
+
+
+/* ==================== EMPTY STATE ==================== */
+.empty-state {
+    text-align: center;
+    padding: 4rem 2rem;
+}
+
+.empty-state i {
+    font-size: 5rem;
+    color: var(--text-light);
+    margin-bottom: 1.5rem;
+    opacity: 0.5;
+}
+
+.empty-state h3 {
+    font-size: 1.8rem;
+    color: var(--text-dark);
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+
+.empty-state p {
+    font-size: 1.1rem;
+    color: var(--text-light);
+    margin-bottom: 2rem;
+}
+
+/* ==================== ANIMATIONS ==================== */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ==================== SCROLLBAR ==================== */
+.profile-sidebar::-webkit-scrollbar {
+    width: 6px;
+}
+
+.profile-sidebar::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.profile-sidebar::-webkit-scrollbar-thumb {
+    background: rgba(0, 102, 102, 0.2);
+    border-radius: 3px;
+}
+
+.profile-sidebar::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 102, 102, 0.4);
+}
+
+/* ==================== RESPONSIVE DESIGN ==================== */
+@media (max-width: 1024px) {
+    .profile-sidebar {
+        width: 280px;
+    }
+
+    .profile-main {
+        margin-left: 280px;
+    }
+
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .profile-info-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    body {
+        flex-direction: column;
+    }
+
+    .profile-sidebar {
+        width: 100%;
+        position: static;
+        height: auto;
+    }
+
+    .profile-main {
+        margin-left: 0;
+    }
+
+    .nav-bar {
+        padding: 1rem 1.5rem;
+    }
+
+    .nav-bar h1 {
+        font-size: 1.4rem;
+    }
+
+    .profile-container {
+        padding: 1.5rem;
+    }
+
+    .profile-card,
+    .orders-section {
+        padding: 1.5rem;
+    }
+
+    .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .form-actions {
+        flex-direction: column;
+    }
+
+    .btn {
+        width: 100%;
+    }
+
+    .order-product {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .nav-user-info {
+        display: none;
+    }
+}
+
+@media (max-width: 480px) {
+    .sidebar-header {
+        padding: 2rem 1.5rem 1.5rem;
+    }
+
+    .profile-avatar {
+        width: 80px;
+        height: 80px;
+    }
+
+    .profile-avatar i {
+        font-size: 2.5rem;
+    }
+
+    .profile-name {
+        font-size: 1.3rem;
+    }
+
+    .menu-link {
+        padding: 0.9rem 1.5rem;
+        font-size: 0.95rem;
+    }
+
+    .stat-card {
+        padding: 1.5rem;
+    }
+
+    .stat-icon {
+        width: 60px;
+        height: 60px;
+        font-size: 1.75rem;
+    }
+
+    .stat-number {
+        font-size: 1.75rem;
+    }
+}
