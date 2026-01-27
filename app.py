@@ -1,10 +1,12 @@
-from flask import Flask, render_template, request, redirect, url_for, flash, session
+from flask import Flask, render_template, request, redirect, url_for, flash, session, make_response
 import pymysql
 import random
 import bcrypt
 from datetime import datetime
 from functools import wraps
 import os
+from fpdf import FPDF
+
 
 app = Flask(__name__)
 app.secret_key = os.getenv('SECRET_KEY') or os.getenv('FLASK_SECRET') or 'dev-secret-change-me'
@@ -77,7 +79,7 @@ def init_db():
     )
     """)
 
-    # Tabel users (tambahan baru)
+    # Tabel users
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS users (
         id INT PRIMARY KEY AUTO_INCREMENT,
@@ -91,24 +93,9 @@ def init_db():
     )
     """)
 
-    try:
-        cursor.execute("ALTER TABLE orders ADD COLUMN user_id INT")
-    except:
-        pass
-    try:
-        cursor.execute("ALTER TABLE orders ADD COLUMN status VARCHAR(50) DEFAULT 'pending'")
-    except:
-        pass
-    try:
-        cursor.execute("ALTER TABLE orders ADD COLUMN total_price DECIMAL(10,2)")
-    except:
-        pass
-    try:
-        cursor.execute("ALTER TABLE orders ADD COLUMN created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-    except:
-        pass
 
-    # Cek dan tambah data produk jika belum ada (JANGAN DIUBAH)
+
+    # Cek dan tambah data produk jika belum ada
     cursor.execute("SELECT COUNT(*) as cnt FROM products")
     if cursor.fetchone()['cnt'] == 0:
         cursor.executemany("INSERT INTO products (name, slug, price) VALUES (%s, %s, %s)", [
@@ -197,7 +184,7 @@ def login():
                 return render_template('login.html')
 
             if valid:
-                # Ganti session (bersihkan session lama jika ada)
+                # Ganti session
                 session.clear()
                 session['user_id'] = user['id']
                 session['name'] = user.get('name')
@@ -356,11 +343,7 @@ def add_to_cart():
     flash(f"{product['name']} ditambahkan ke keranjang.", 'success')
     return redirect(request.referrer or url_for('product'))
 
-# Lihat keranjang
-@app.route('/cart')
-@login_required
-def view_cart():
-    return redirect(url_for('profile'))
+
 
 # Hapus item dari keranjang (POST)
 @app.route('/cart/remove', methods=['POST'])
@@ -375,7 +358,7 @@ def remove_from_cart():
     # redirect back to profile where embedded cart is shown
     return redirect(url_for('profile'))
 
-# Checkout seluruh keranjang (membuat invoice_data untuk payment)
+# Checkout seluruh keranjang
 @app.route('/checkout/cart', methods=['GET', 'POST'])
 @login_required
 def checkout_cart():
@@ -384,7 +367,7 @@ def checkout_cart():
         flash('Keranjang kosong!', 'danger')
         return redirect(url_for('product'))
 
-    # Buat ringkasan invoice di session (bisa dikembangkan untuk menyimpan multi-item)
+    # Buat ringkasan invoice di session
     items = []
     total_price = 0
     for slug, it in cart.items():
@@ -414,7 +397,7 @@ def place_order():
     product_name = request.form["product_name"]
     try:
         quantity = int(request.form["quantity"])
-    except:
+    except (ValueError, TypeError):
         flash("Jumlah tidak valid!", "danger")
         return redirect(url_for("product"))
     customer_name = request.form["customer_name"]
@@ -422,7 +405,7 @@ def place_order():
     contact = request.form["contact"]
     try:
         price = float(request.form["price"])
-    except:
+    except (ValueError, TypeError):
         flash("Harga tidak valid!", "danger")
         return redirect(url_for("product"))
     slug = request.form.get("slug", "")
@@ -533,7 +516,7 @@ def payment():
     if request.method == 'POST':
         payment_method = request.form.get('payment_method')
         
-        # Simpan metode pembayaran ke session (bisa ditambahkan ke database jika perlu)
+        # Simpan metode pembayaran ke session
         session['payment_method'] = payment_method
         
         flash('Pembayaran berhasil! Pesanan Anda sedang diproses.', 'success')
@@ -557,8 +540,6 @@ def invoice():
     
     flash("Pesanan berhasil dibuat!", "success")
     return render_template('invoice.html', invoice_data=invoice_data)
-
-# Orders routes removed — orders are shown inside the `profile` page.
 
 # Route untuk update profil
 @app.route('/profile', methods=['GET', 'POST'])
@@ -618,39 +599,58 @@ def profile():
 def dashboard():
     conn = get_db_connection()
     cursor = conn.cursor()
-    
+
+    # Get current year and month
+    current_year = datetime.now().year
+    current_month = datetime.now().month
+
+    # Get filter parameters for laporan
+    selected_start_month = request.args.get('start_month', str(current_month))
+    selected_end_month = request.args.get('end_month', str(current_month))
+    selected_year = request.args.get('year', str(current_year))
+
+    # Convert to int
+    try:
+        start_month_int = int(selected_start_month)
+        end_month_int = int(selected_end_month)
+        year_int = int(selected_year)
+    except (ValueError, TypeError):
+        start_month_int = current_month
+        end_month_int = current_month
+        year_int = current_year
+
     # Hitung statistik
     cursor.execute("SELECT COUNT(*) as total_orders FROM orders")
     total_orders_row = cursor.fetchone()
     total_orders = total_orders_row['total_orders'] if total_orders_row and total_orders_row.get('total_orders') else 0
-    
+
     cursor.execute("SELECT COUNT(*) as total_users FROM users")
     total_users_row = cursor.fetchone()
     total_users = total_users_row['total_users'] if total_users_row and total_users_row.get('total_users') else 0
-    
+
     cursor.execute("SELECT COUNT(*) as total_products FROM products")
     total_products_row = cursor.fetchone()
     total_products = total_products_row['total_products'] if total_products_row and total_products_row.get('total_products') else 0
-    
+
     # Hitung total pendapatan dari orders yang sudah selesai
     cursor.execute("SELECT SUM(total_price) as total_revenue FROM orders WHERE status = 'completed'")
     revenue_result = cursor.fetchone()
     total_revenue = 0
     if revenue_result and revenue_result.get('total_revenue') is not None:
         total_revenue = revenue_result['total_revenue']
-    
+
     cursor.execute("""
-        SELECT 
-            o.*, 
+        SELECT
+            o.*,
             u.name as customer_name,
             COALESCE(o.total_price, 0) as total_price_fixed,
             DATE_FORMAT(o.created_at, '%d/%m/%Y %H:%i') as formatted_date
-        FROM orders o 
-        LEFT JOIN users u ON o.user_id = u.id 
+        FROM orders o
+        LEFT JOIN users u ON o.user_id = u.id
         ORDER BY o.id DESC LIMIT 10
     """)
     recent_orders = cursor.fetchall()
-    
+
     # Ambil produk
     cursor.execute("SELECT * FROM products")
     products = cursor.fetchall()
@@ -678,6 +678,105 @@ def dashboard():
     """)
     status_stats = cursor.fetchall()
 
+    # Data untuk chart penjualan 12 bulan terakhir
+    cursor.execute("""
+        SELECT
+            DATE_FORMAT(created_at, '%Y-%m') as month,
+            COUNT(*) as orders_count,
+            COALESCE(SUM(total_price), 0) as revenue
+        FROM orders
+        WHERE created_at >= DATE_SUB(CURDATE(), INTERVAL 12 MONTH)
+        GROUP BY DATE_FORMAT(created_at, '%Y-%m')
+        ORDER BY month
+    """)
+    chart_data = cursor.fetchall()
+
+    # Siapkan data chart (pastikan 12 bulan terakhir ada)
+    import calendar
+
+    # Buat list 12 bulan terakhir
+    today = datetime.now()
+    chart_months = []
+    chart_orders = []
+    chart_revenue = []
+
+    # Nama bulan dalam bahasa Indonesia
+    bulan_id = {
+        1: 'Januari', 2: 'Februari', 3: 'Maret', 4: 'April', 5: 'Mei', 6: 'Juni',
+        7: 'Juli', 8: 'Agustus', 9: 'September', 10: 'Oktober', 11: 'November', 12: 'Desember'
+    }
+
+    for i in range(11, -1, -1):
+        # Hitung bulan dan tahun
+        target_date = today.replace(day=1)  # Awal bulan ini
+        for _ in range(i):
+            if target_date.month == 1:
+                target_date = target_date.replace(year=target_date.year - 1, month=12)
+            else:
+                target_date = target_date.replace(month=target_date.month - 1)
+
+        month_key = target_date.strftime('%Y-%m')
+        month_name = f"{bulan_id[target_date.month]} {target_date.year}"
+
+        # Cari data untuk bulan ini
+        data = next((item for item in chart_data if item['month'] == month_key), None)
+
+        chart_months.append(month_name)
+        chart_orders.append(int(data['orders_count']) if data else 0)
+        chart_revenue.append(float(data['revenue']) if data else 0)
+
+    # Data untuk laporan penjualan
+    cursor.execute("""
+        SELECT
+            o.id,
+            o.kd_order,
+            o.product_name,
+            o.quantity,
+            o.customer_name,
+            o.address,
+            o.contact,
+            o.status,
+            COALESCE(o.total_price, 0) as total_price,
+            DATE_FORMAT(o.created_at, '%%d/%%m/%%Y %%H:%%i') as formatted_date,
+            o.created_at
+        FROM orders o
+        WHERE MONTH(o.created_at) BETWEEN %s AND %s AND YEAR(o.created_at) = %s
+        ORDER BY o.created_at DESC
+    """, (start_month_int, end_month_int, year_int))
+    laporan_orders = cursor.fetchall()
+
+    # Calculate statistics for laporan
+    laporan_total_orders = len(laporan_orders)
+    laporan_total_revenue = sum(float(order['total_price']) for order in laporan_orders)
+
+    # Count by status for laporan
+    cursor.execute("""
+        SELECT
+            status,
+            COUNT(*) as count,
+            COALESCE(SUM(total_price), 0) as revenue
+        FROM orders
+        WHERE MONTH(created_at) BETWEEN %s AND %s AND YEAR(created_at) = %s
+        GROUP BY status
+    """, (start_month_int, end_month_int, year_int))
+    laporan_status_stats = cursor.fetchall()
+
+    # Get available years from database
+    cursor.execute("""
+        SELECT DISTINCT YEAR(created_at) as year
+        FROM orders
+        ORDER BY year DESC
+    """)
+    db_years = [row['year'] for row in cursor.fetchall()]
+
+    # Generate years from current_year - 5 to current_year + 5
+    start_year = current_year - 5
+    end_year = current_year + 5
+    generated_years = list(range(start_year, end_year + 1))
+
+    # Combine and deduplicate
+    available_years = sorted(list(set(db_years + generated_years)), reverse=True)
+
     conn.close()
 
     return render_template('dashboard.html',
@@ -689,7 +788,20 @@ def dashboard():
                          products=products,
                          all_users=all_users,
                          all_orders=all_orders,
-                         status_stats=status_stats)
+                         status_stats=status_stats,
+                         chart_months=chart_months,
+                         chart_orders=chart_orders,
+                         chart_revenue=chart_revenue,
+                         # Laporan data
+                         orders=laporan_orders,
+                         total_orders_laporan=laporan_total_orders,
+                         total_revenue_laporan=laporan_total_revenue,
+                         status_stats_laporan=laporan_status_stats,
+                         selected_start_month=start_month_int,
+                         selected_end_month=end_month_int,
+                         selected_year=year_int,
+                         bulan_id=bulan_id,
+                         available_years=available_years)
 
 # Route untuk manajemen produk (admin only)
 @app.route("/kelola-products")
@@ -828,7 +940,128 @@ def update_user_role(user_id):
     flash('Role user berhasil diupdate!', 'success')
     return redirect(url_for('dashboard') + '#section-users')
 
+# Route untuk download laporan PDF (admin only)
+@app.route('/download_laporan_pdf/<int:start_month>/<int:end_month>/<int:year>')
+@admin_required
+def download_laporan_pdf(start_month, end_month, year):
+    conn = get_db_connection()
+    cursor = conn.cursor()
 
+    # Ambil data laporan untuk bulan dan tahun tertentu
+    cursor.execute("""
+        SELECT
+            o.id,
+            o.kd_order,
+            o.product_name,
+            o.quantity,
+            o.customer_name,
+            o.address,
+            o.contact,
+            o.status,
+            COALESCE(o.total_price, 0) as total_price,
+            DATE_FORMAT(o.created_at, '%%d/%%m/%%Y %%H:%%i') as formatted_date,
+            o.created_at
+        FROM orders o
+        WHERE MONTH(o.created_at) BETWEEN %s AND %s AND YEAR(o.created_at) = %s
+        ORDER BY o.created_at DESC
+    """, (start_month, end_month, year))
+    orders = cursor.fetchall()
+
+    # Hitung statistik
+    total_orders = len(orders)
+    total_revenue = sum(float(order['total_price']) for order in orders)
+
+    # Hitung status stats
+    cursor.execute("""
+        SELECT
+            status,
+            COUNT(*) as count,
+            COALESCE(SUM(total_price), 0) as revenue
+        FROM orders
+        WHERE MONTH(created_at) BETWEEN %s AND %s AND YEAR(created_at) = %s
+        GROUP BY status
+    """, (start_month, end_month, year))
+    status_stats = cursor.fetchall()
+
+    conn.close()
+
+    # Buat PDF
+    pdf = FPDF()
+    pdf.add_page()
+
+    # Header
+    pdf.set_font('Arial', 'B', 16)
+    pdf.cell(0, 10, 'Laporan Penjualan BIMANTARA STAINLESS STEEL', 0, 1, 'C')
+    pdf.set_font('Arial', '', 12)
+    bulan_id = {
+        1: 'Januari', 2: 'Februari', 3: 'Maret', 4: 'April', 5: 'Mei', 6: 'Juni',
+        7: 'Juli', 8: 'Agustus', 9: 'September', 10: 'Oktober', 11: 'November', 12: 'Desember'
+    }
+    if start_month == end_month:
+        periode = f'Periode: {bulan_id[start_month]} {year}'
+    else:
+        periode = f'Periode: {bulan_id[start_month]} - {bulan_id[end_month]} {year}'
+    pdf.cell(0, 10, periode, 0, 1, 'C')
+    pdf.cell(0, 10, f'Tanggal Generate: {datetime.now().strftime("%d/%m/%Y %H:%M")}', 0, 1, 'C')
+    pdf.ln(10)
+
+    # Statistik
+    pdf.set_font('Arial', 'B', 14)
+    pdf.cell(0, 10, 'Ringkasan', 0, 1)
+    pdf.set_font('Arial', '', 12)
+    pdf.cell(0, 8, f'Total Pesanan: {total_orders}', 0, 1)
+    pdf.cell(0, 8, f'Total Pendapatan: Rp {total_revenue:,.0f}', 0, 1)
+    pdf.ln(5)
+
+    # Status stats
+    pdf.set_font('Arial', 'B', 12)
+    pdf.cell(0, 8, 'Statistik Status Pesanan:', 0, 1)
+    pdf.set_font('Arial', '', 12)
+    for stat in status_stats:
+        pdf.cell(0, 6, f'{stat["status"].title()}: {stat["count"]} pesanan (Rp {stat["revenue"]:,.0f})', 0, 1)
+    pdf.ln(10)
+
+    # Tabel pesanan
+    pdf.set_font('Arial', 'B', 14)
+    pdf.cell(0, 10, 'Detail Pesanan', 0, 1)
+
+    # Header tabel
+    pdf.set_font('Arial', 'B', 10)
+    pdf.cell(25, 8, 'Kode Order', 1)
+    pdf.cell(40, 8, 'Produk', 1)
+    pdf.cell(30, 8, 'Pelanggan', 1)
+    pdf.cell(25, 8, 'Total', 1)
+    pdf.cell(20, 8, 'Status', 1)
+    pdf.cell(30, 8, 'Tanggal', 1)
+    pdf.ln()
+
+    # Data tabel
+    pdf.set_font('Arial', '', 9)
+    for order in orders:
+        pdf.cell(25, 6, str(order['kd_order']), 1)
+        pdf.cell(40, 6, order['product_name'][:35] + '...' if len(order['product_name']) > 35 else order['product_name'], 1)
+        pdf.cell(30, 6, order['customer_name'][:25] + '...' if len(order['customer_name']) > 25 else order['customer_name'], 1)
+        pdf.cell(25, 6, f"Rp {float(order['total_price']):,.0f}", 1)
+        pdf.cell(20, 6, order['status'].title(), 1)
+        pdf.cell(30, 6, order['formatted_date'], 1)
+        pdf.ln()
+
+    # Footer
+    pdf.ln(10)
+    pdf.set_font('Arial', 'I', 10)
+    pdf.cell(0, 8, 'Laporan ini dihasilkan secara otomatis oleh sistem BIMANTARA STAINLESS STEEL', 0, 1, 'C')
+
+    # Response
+    if start_month == end_month:
+        filename = f'laporan_penjualan_{bulan_id[start_month]}_{year}.pdf'
+    else:
+        filename = f'laporan_penjualan_{bulan_id[start_month]}_to_{bulan_id[end_month]}_{year}.pdf'
+
+    response = make_response(pdf.output(dest='S').encode('latin1'))
+    response.headers['Content-Type'] = 'application/pdf'
+    response.headers['Content-Disposition'] = f'attachment; filename={filename}'
+
+    return response
 
 
 
