@@ -1064,7 +1064,7 @@ def download_laporan_pdf(start_month, end_month, year):
     return response
 
 
-# ==================== ERROR HANDLERS ====================
+# ==================== ERROR HANDLERS ===================
 
 @app.errorhandler(404)
 def page_not_found(e):
