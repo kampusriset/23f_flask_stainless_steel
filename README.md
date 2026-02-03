@@ -6,6 +6,10 @@ Aplikasi web e-commerce untuk penjualan produk stainless steel seperti dandang (
 - Fandy Dwi Putra ( 2313010522 )
 - Ilyas Nur Rokhim ( 2313010512 )
 
+# Tautan Video Dokumentasi 
+Anda dapat menonton video dokumentasi aolikasi melalui tautan berikut :
+https://drive.google.com/drive/folders/1bWlMUYTAgd6cCaJpLH5B6Rt8L1iQYtkI?usp=sharing
+
 ## Fitur Utama
 
 - **Manajemen Produk**: Tambah, edit, dan hapus produk stainless steel
@@ -154,3 +158,4 @@ Proyek ini menggunakan lisensi MIT. Lihat file `LICENSE` untuk detail lebih lanj
 ## Kontak
 
 Untuk pertanyaan atau dukungan, silakan hubungi tim development.
+
