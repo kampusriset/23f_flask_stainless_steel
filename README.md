@@ -147,9 +147,6 @@ Database akan dibuat otomatis saat aplikasi pertama kali dijalankan.
 4. Push ke branch (`git push origin feature/AmazingFeature`)
 5. Buat Pull Request
 
-## Lisensi
-
-Proyek ini menggunakan lisensi MIT. Lihat file `LICENSE` untuk detail lebih lanjut.
 
 ## Kontak
 
