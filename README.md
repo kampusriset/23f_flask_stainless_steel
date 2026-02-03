@@ -2,6 +2,10 @@
 
 Aplikasi web e-commerce untuk penjualan produk stainless steel seperti dandang (panci) menggunakan framework Flask.
 
+# Perkenalan Tim
+- Fandy Dwi Putra ( 2313010522 )
+- Ilyas Nur Rokhim ( 2313010512 )
+
 ## Fitur Utama
 
 - **Manajemen Produk**: Tambah, edit, dan hapus produk stainless steel

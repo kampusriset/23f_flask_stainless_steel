@@ -462,6 +462,7 @@ def place_cart_order():
 
     # Hitung total keseluruhan
     total_price = sum(it['price'] * it['quantity'] for it in cart.values())
+    total_quantity = sum(it['quantity'] for it in cart.values())
 
     # Buat satu order untuk semua item di keranjang
     kd_order = random.randint(10000, 99999)
@@ -472,7 +473,7 @@ def place_cart_order():
     cursor.execute("""
         INSERT INTO orders (kd_order, product_name, quantity, customer_name, address, contact, user_id, status, total_price)
         VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
-    """, (kd_order, product_name_combined, 1, customer_name, address, contact, session['user_id'], 'pending', total_price))
+    """, (kd_order, product_name_combined, total_quantity, customer_name, address, contact, session['user_id'], 'pending', total_price))
 
     conn.commit()
     conn.close()
@@ -491,7 +492,7 @@ def place_cart_order():
     session["invoice_data"] = {
         "kd_order": kd_order,
         "product_name": product_name_combined,
-        "quantity": 1,  # Karena satu order untuk semua
+        "quantity": total_quantity,  # Total quantity dari semua item di keranjang
         "customer_name": customer_name,
         "address": address,
         "contact": contact,
@@ -529,15 +530,16 @@ def payment():
 @login_required
 def invoice():
     invoice_data = session.get("invoice_data")
-    
+
     if not invoice_data:
         flash('Tidak ada data invoice!', 'danger')
         return redirect(url_for('profile') + '#section-orders')
-    
-    # Hapus cart dari session setelah ditampilkan
-    session.pop('cart', None)  # kosongkan keranjang
-    session.modified = True  # Pastikan session diupdate
-    
+
+    # Hapus cart dari session hanya jika pesanan dari keranjang (ada cart_items)
+    if 'cart_items' in invoice_data:
+        session.pop('cart', None)  # kosongkan keranjang
+        session.modified = True  # Pastikan session diupdate
+
     flash("Pesanan berhasil dibuat!", "success")
     return render_template('invoice.html', invoice_data=invoice_data)
 
@@ -588,8 +590,9 @@ def profile():
     # Include cart from session so embedded cart section can render
     cart = session.get('cart', {})
     subtotal = sum(item['price'] * item['quantity'] for item in cart.values()) if cart else 0
+    total_cart_items = sum(item['quantity'] for item in cart.values()) if cart else 0
 
-    return render_template('profile.html', user=user, orders=orders, total_orders=total_orders, cart=cart, subtotal=subtotal)
+    return render_template('profile.html', user=user, orders=orders, total_orders=total_orders, cart=cart, subtotal=subtotal, total_cart_items=total_cart_items)
 
 # ==================== ROUTE ADMIN ====================
 
